@@ -20,8 +20,8 @@ Customize Shell themes, Accent Colors, Icon themes, Fonts, Logo, Banner messages
 
 ### Installation
 ```
-git clone https://github.com/PRATAP-KUMAR/gdm-extension/
-cd gdm-extension
+git clone https://github.com/PRATAP-KUMAR/gse-gdm-extension/
+cd gse-gdm-extension
 sudo ./install.sh
 
 # Observation: Occassionaly when system is crashed or due to someother system errors, this extension stops working. In such a case you need to run `sudo ./install.sh` again.
