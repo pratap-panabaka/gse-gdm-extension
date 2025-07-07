@@ -39,8 +39,6 @@ sudo ./install.sh
 ![9](https://github.com/user-attachments/assets/066fcb6c-8560-4cc7-8b88-6ee56d438cc2)
 ![10](https://github.com/user-attachments/assets/d77cb20d-4a6b-40c7-becb-453f711fd25d)
 
-
-
 ### Tweaking from GDM Login Screen
 1. On the left side topbar, there is a preferences Icon shown. Click on it and it will popup the menu.
 2. Based on number of monitors connected, it will popup a menu for all monitors like `Monitor - 1`, `Monitor - 2` upto 4 monitors.
