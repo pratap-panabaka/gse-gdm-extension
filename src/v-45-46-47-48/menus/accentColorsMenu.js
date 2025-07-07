@@ -8,7 +8,7 @@ import updateOrnament from '../utils/updateOrnament.js';
 import GNOME_SHELL_VERSION from '../utils/shellVersion.js';
 
 const DESKTOP_SCHEMA = 'org.gnome.desktop.interface';
-const dconfDesktopSettings = new Gio.Settings({ schema_id: DESKTOP_SCHEMA });
+const dconfDesktopSettings = new Gio.Settings({schema_id: DESKTOP_SCHEMA});
 
 const accentColorsMenu = () => {
     const menu = new PopupMenu.PopupSubMenuMenuItem('Accent Colors', false);
@@ -24,12 +24,12 @@ const accentColorsMenu = () => {
     menu.menu.box.add_child(scrollView);
 
     const ACCENT_COLORS =
-        new Gio.Settings({ schema_id: "org.gnome.desktop.interface" })
+        new Gio.Settings({schema_id: 'org.gnome.desktop.interface'})
             .get_range('accent-color')
             .print(true)
             .match(/\[[^\][]*]/)[0]
-            .replace(/[\]\[\s']/g, '')
-            .split(',') || []
+            .replace(/[[\s'\]]/g, '')
+            .split(',') || [];
 
     const items = [];
 
@@ -49,8 +49,8 @@ const accentColorsMenu = () => {
         });
     });
 
-    const accent_color = dconfDesktopSettings.get_string('accent-color');
-    updateOrnament(items, accent_color);
+    const accentColor = dconfDesktopSettings.get_string('accent-color');
+    updateOrnament(items, accentColor);
 
     return menu;
 };

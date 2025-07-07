@@ -11,7 +11,7 @@
 // Below code is tweaked by PRATAP PANABAKA <pratap@fastmail.fm>
 
 import Gio from 'gi://Gio';
-import { recursiveFileOperation, recursiveGetFileNamesCallback } from '../utils/recursiveFileOperation.js';
+import {recursiveFileOperation, recursiveGetFileNamesCallback} from '../utils/recursiveFileOperation.js';
 
 const FONT_DIRECTORIES = ['/usr/local/share/fonts', '/usr/share/fonts'];
 
@@ -29,6 +29,6 @@ const getFonts = async () => {
         .map(s => s.split(/(?<=[a-z])(?=[A-Z])/).join(' ')); // based on Font naming convention split the strig with Capital letters
 
     return [...new Set(modified)];
-}
+};
 
 export default getFonts;

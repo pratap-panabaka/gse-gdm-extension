@@ -11,7 +11,7 @@ import getFonts from '../getNamesAsync/getFonts.js';
 const DESKTOP_SCHEMA = 'org.gnome.desktop.interface';
 const FONT_SIZE = 11;
 
-const dconfDesktopSettings = new Gio.Settings({ schema_id: DESKTOP_SCHEMA });
+const dconfDesktopSettings = new Gio.Settings({schema_id: DESKTOP_SCHEMA});
 
 const fontsMenu = async () => {
     const menu = new PopupMenu.PopupSubMenuMenuItem('Fonts', false);

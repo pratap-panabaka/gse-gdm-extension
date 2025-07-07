@@ -12,7 +12,7 @@
 /* eslint-disable no-await-in-loop */
 
 import Gio from 'gi://Gio';
-import { recursiveFileOperation, recursiveGetFileNamesCallback } from '../utils/recursiveFileOperation.js';
+import {recursiveFileOperation, recursiveGetFileNamesCallback} from '../utils/recursiveFileOperation.js';
 
 const BACKGROUND_DIRECTORIES = ['/usr/local/share/backgrounds', '/usr/share/backgrounds'];
 

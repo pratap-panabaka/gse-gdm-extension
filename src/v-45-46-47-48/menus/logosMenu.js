@@ -9,9 +9,9 @@ import GNOME_SHELL_VERSION from '../utils/shellVersion.js';
 import getLogos from '../getNamesAsync/getLogos.js';
 
 const LOGIN_SCREEN_SCHEMA = 'org.gnome.login-screen';
-const dconfLoginSettings = new Gio.Settings({ schema_id: LOGIN_SCREEN_SCHEMA });
+const dconfLoginSettings = new Gio.Settings({schema_id: LOGIN_SCREEN_SCHEMA});
 
-const logosMenu = async (gdmExtension) => {
+const logosMenu = async () => {
     const menu = new PopupMenu.PopupSubMenuMenuItem('Logo (small icon at bottom of login screen)', false);
 
     const scrollView = new St.ScrollView();
@@ -57,7 +57,7 @@ const logosMenu = async (gdmExtension) => {
         });
     });
 
-    const text = dconfLoginSettings.get_string('logo') || 'None'
+    const text = dconfLoginSettings.get_string('logo') || 'None';
     updateOrnament(items, text);
 
     return menu;

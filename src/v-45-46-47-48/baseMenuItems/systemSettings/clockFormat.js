@@ -4,13 +4,13 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import updateOrnament from '../../utils/updateOrnament.js';
 
 const DESKTOP_SCHEMA = 'org.gnome.desktop.interface';
-const dconfDesktopSettings = new Gio.Settings({ schema_id: DESKTOP_SCHEMA });
+const dconfDesktopSettings = new Gio.Settings({schema_id: DESKTOP_SCHEMA});
 
 const clockFormat = () => {
     let items = [];
 
     let keys = ['12h', '24h'];
-    let dconfKey = "clock-format";
+    let dconfKey = 'clock-format';
 
     keys.forEach(key => {
         const item = new PopupMenu.PopupMenuItem(key);

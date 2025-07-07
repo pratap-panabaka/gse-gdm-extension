@@ -20,17 +20,17 @@ Gio._promisify(Gio.FileEnumerator.prototype, 'next_files_async');
  */
 async function recursiveGetFileNamesCallback(file, fileType, array) {
     switch (fileType) {
-        case Gio.FileType.REGULAR: {
-            array.push(file.get_uri());
-            return;
-        }
+    case Gio.FileType.REGULAR: {
+        array.push(file.get_uri());
+        return;
+    }
 
-        case Gio.FileType.DIRECTORY: {
-            return recursiveFileOperation(file, recursiveGetFileNamesCallback, array);
-        }
+    case Gio.FileType.DIRECTORY: {
+        return recursiveFileOperation(file, recursiveGetFileNamesCallback, array);
+    }
 
-        default:
-            return null;
+    default:
+        return null;
     }
 };
 
@@ -83,4 +83,4 @@ async function recursiveFileOperation(file, callback, array) {
     return callback(file, array);
 }
 
-export { recursiveFileOperation, recursiveGetFileNamesCallback };
+export {recursiveFileOperation, recursiveGetFileNamesCallback};

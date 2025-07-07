@@ -11,7 +11,7 @@ import updateOrnament from '../utils/updateOrnament.js';
 
 const THEME_DIRECTORIES = ['/usr/local/share/themes', '/usr/share/themes'];
 
-const shellThemesMenu = async (gdmExtension) => {
+const shellThemesMenu = async gdmExtension => {
     const menu = new PopupMenu.PopupSubMenuMenuItem('Shell Themes', false);
 
     const scrollView = new St.ScrollView();
@@ -77,12 +77,12 @@ const shellThemesMenu = async (gdmExtension) => {
         });
 
         section.addMenuItem(themeItem);
-    })
+    });
 
-    const text = gdmExtension._settings.get_string("shell-theme") || 'Default'
+    const text = gdmExtension._settings.get_string('shell-theme') || 'Default';
     updateOrnament(items, text);
 
     return menu;
-}
+};
 
 export default shellThemesMenu;

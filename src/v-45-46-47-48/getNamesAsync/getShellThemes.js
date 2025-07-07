@@ -22,7 +22,7 @@ const getShellThemes = async () => {
     const shellThemes = [];
     for (const dirName of THEME_DIRECTORIES) {
         const dir = Gio.File.new_for_path(dirName);
-        if (dir.query_exists(null))
+        if (dir.query_exists(null)) {
             for (const name of await enumerateDir(dir)) {
                 const file = dir.resolve_relative_path(
                     `${name}/gnome-shell/gnome-shell.css`);
@@ -37,8 +37,9 @@ const getShellThemes = async () => {
                         logError(e);
                 }
             }
+        }
     }
     return shellThemes;
-}
+};
 
 export default getShellThemes;

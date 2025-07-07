@@ -90,7 +90,7 @@ const backgroundsMenu = async (gdmExtension, n) => {
             AnimationUtils.ensureActorVisibleInScrollView(scrollView, fileName);
         });
         section.addMenuItem(fileName);
-    })
+    });
     //
 
     section.addMenuItem(new PopupMenu.PopupSeparatorMenuItem()); //

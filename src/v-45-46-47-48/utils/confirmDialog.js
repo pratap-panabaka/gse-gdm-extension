@@ -6,8 +6,8 @@ import * as ModalDialog from 'resource:///org/gnome/shell/ui/modalDialog.js';
 const ConfirmDialog = GObject.registerClass(
     {
         Signals: {
-            cancel: { param_types: [GObject.TYPE_BOOLEAN] },
-            proceed: { param_types: [GObject.TYPE_BOOLEAN] },
+            cancel: {param_types: [GObject.TYPE_BOOLEAN]},
+            proceed: {param_types: [GObject.TYPE_BOOLEAN]},
         },
     },
     class ConfirmDialog extends ModalDialog.ModalDialog {

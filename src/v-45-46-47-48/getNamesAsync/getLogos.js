@@ -19,7 +19,7 @@ const getLogos = async () => {
     const logos = [];
     for (const dirName of LOGO_DIRECTORIES) {
         const dir = Gio.File.new_for_path(dirName);
-        if (dir.query_exists(null))
+        if (dir.query_exists(null)) {
             for (const name of await enumerateFiles(dir)) {
                 if (
                     (name.endsWith('.jpg') ||
@@ -32,12 +32,12 @@ const getLogos = async () => {
                         name.endsWith('.PNG') ||
                         name.endsWith('.SVG') ||
                         name.endsWith('GIF')) && name.includes('logo')
-                ) {
+                )
                     logos.push(`${dirName}/${name}`); // push all file names
-                }
             }
+        }
     }
     return logos;
-}
+};
 
 export default getLogos;

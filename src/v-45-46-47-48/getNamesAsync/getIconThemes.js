@@ -19,11 +19,12 @@ const getIconThemes = async () => {
     const iconThemes = [];
     for (const dirName of ICON_DIRECTORIES) {
         const dir = Gio.File.new_for_path(dirName);
-        if (dir.query_exists(null))
+        if (dir.query_exists(null)) {
             for (const name of await enumerateDir(dir))
-                iconThemes.push(name); // push all Icon folder names
+                iconThemes.push(name);
+        } // push all Icon folder names
     }
     return iconThemes;
-}
+};
 
 export default getIconThemes;

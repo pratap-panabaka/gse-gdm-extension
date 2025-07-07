@@ -4,7 +4,7 @@ import St from 'gi://St';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 const LOGIN_SCREEN_SCHEMA = 'org.gnome.login-screen';
-const dconfLoginSettings = new Gio.Settings({ schema_id: LOGIN_SCREEN_SCHEMA });
+const dconfLoginSettings = new Gio.Settings({schema_id: LOGIN_SCREEN_SCHEMA});
 
 let inputText, getInput;
 

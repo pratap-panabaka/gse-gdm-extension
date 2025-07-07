@@ -1,7 +1,7 @@
-import Gio from 'gi://Gio';
 import St from 'gi://St';
 
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import * as AnimationUtils from 'resource:///org/gnome/shell/misc/animationUtils.js';
 
 import {
     addTapToClick,
@@ -11,7 +11,7 @@ import {
     addClockShowWeekday,
     addShowBatteryPercentage,
     addDisableRestartButtons,
-    addDisableUserList
+    addDisableUserList,
 } from '../systemSettings.js';
 
 import clockFormat from '../baseMenuItems/systemSettings/clockFormat.js';
@@ -102,6 +102,6 @@ const systemSettingsMenu = () => {
     });
 
     return menu;
-}
+};
 
 export default systemSettingsMenu;

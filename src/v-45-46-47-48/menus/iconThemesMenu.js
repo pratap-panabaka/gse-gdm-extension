@@ -11,7 +11,7 @@ import getIconThemes from '../getNamesAsync/getIconThemes.js';
 
 const DESKTOP_SCHEMA = 'org.gnome.desktop.interface';
 
-const dconfDesktopSettings = new Gio.Settings({ schema_id: DESKTOP_SCHEMA });
+const dconfDesktopSettings = new Gio.Settings({schema_id: DESKTOP_SCHEMA});
 
 const iconThemesMenu = async () => {
     const menu = new PopupMenu.PopupSubMenuMenuItem('Icon Themes', false);

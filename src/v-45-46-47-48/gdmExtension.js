@@ -18,7 +18,7 @@ import logosMenu from './menus/logosMenu.js';
 import systemSettingsMenu from './menus/systemSettingsMenu.js';
 
 const DESKTOP_SCHEMA = 'org.gnome.desktop.interface';
-const dconfDesktopSettings = new Gio.Settings({ schema_id: DESKTOP_SCHEMA });
+const dconfDesktopSettings = new Gio.Settings({schema_id: DESKTOP_SCHEMA});
 const haveAccentColor = dconfDesktopSettings.list_keys().includes('accent-color');
 
 const gdmExtension = GObject.registerClass(
@@ -35,7 +35,7 @@ const gdmExtension = GObject.registerClass(
                 style_class: 'system-status-icon',
             }));
 
-            this._box.add_child(new St.Label({ text: 'gdm-extension', y_align: Clutter.ActorAlign.CENTER }));
+            this._box.add_child(new St.Label({text: 'gdm-extension', y_align: Clutter.ActorAlign.CENTER}));
 
             this._order();
         }
@@ -48,11 +48,11 @@ const gdmExtension = GObject.registerClass(
             const icons = await this._createIconThemesMenu(); // create icon themes menu
             const fonts = await this._createFontsMenu(); // create fonts menu
             const logos = await this._createLogosMenu(); // creat logos menu
-            const hideExtensionButton = this._createHideExtensionButton(); // create hide extension button
+            const hideExtButton = this._createHideExtensionButton(); // create hide extension button
 
-            Promise.all([monitors, systemSettings, accentColors, shellThemes, icons, fonts, logos, hideExtensionButton])
-                .then((promises) => {
-                    promises.forEach((promise) => {
+            Promise.all([monitors, systemSettings, accentColors, shellThemes, icons, fonts, logos, hideExtButton])
+                .then(promises => {
+                    promises.forEach(promise => {
                         if (promise) {
                             if (Array.isArray(promise)) {
                                 promise.forEach(menuItem => {
@@ -62,44 +62,45 @@ const gdmExtension = GObject.registerClass(
                                 this.menu.addMenuItem(promise);
                             }
                         }
-                    })
-                })
+                    });
+                });
         }
 
         _createHideExtensionButton() {
             let menuItem = hideExtensionButton(this);
-            return menuItem
+            return menuItem;
         }
 
         _createSystemSettingsMenu() {
-            let menuItem = systemSettingsMenu()
-            return menuItem
+            let menuItem = systemSettingsMenu();
+            return menuItem;
         }
 
         async _createLogosMenu() {
             let menuItem = await logosMenu();
-            return menuItem
+            return menuItem;
         }
 
         async _createFontsMenu() {
             let menuItem = await fontsMenu();
-            return menuItem
+            return menuItem;
         }
 
         async _createIconThemesMenu() {
             let menuItem = await iconThemesMenu();
-            return menuItem
+            return menuItem;
         }
 
         _createAccentColorsMenu() {
-            if (!haveAccentColor) return;
+            if (!haveAccentColor)
+                return null;
             let menuItem = accentColorsMenu();
-            return menuItem
+            return menuItem;
         }
 
         async _createShellThemesMenu() {
             let menuItem = await shellThemesMenu(this);
-            return menuItem
+            return menuItem;
         }
 
         async _createBackgroundsMenu() {
@@ -109,6 +110,7 @@ const gdmExtension = GObject.registerClass(
             nMonitors = Math.min(nMonitors, 4);
             let n = 1;
             while (nMonitors > 0) {
+                /* eslint-disable no-await-in-loop */
                 let menuItem = await backgroundsMenu(this, n);
                 menuItems.push(menuItem);
                 n += 1;

@@ -26,4 +26,4 @@ const primaryColor = (lockscreenExt, n) => {
     return item;
 };
 
-export default primaryColor
+export default primaryColor;
