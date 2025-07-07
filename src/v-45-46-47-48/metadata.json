@@ -8,10 +8,10 @@
     "47",
     "48"
   ],
-  "url": "https://github.com/PRATAP-KUMAR/gdm-extension/",
+  "url": "https://github.com/pratap-panabaka/gse-gdm-extension/",
   "settings-schema": "org.gnome.shell.extensions.gdm-extension",
   "session-modes": [
     "gdm"
   ],
-  "version": 4
+  "version": 5
 }
