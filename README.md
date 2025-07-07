@@ -20,7 +20,7 @@ Customize Shell themes, Accent Colors, Icon themes, Fonts, Logo, Banner messages
 
 ### Installation
 ```
-git clone https://github.com/PRATAP-KUMAR/gse-gdm-extension/
+git clone https://github.com/pratap-panabaka/gse-gdm-extension/
 cd gse-gdm-extension
 sudo ./install.sh
 
