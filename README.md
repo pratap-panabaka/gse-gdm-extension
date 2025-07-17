@@ -156,7 +156,7 @@ The best way is to remove the extension. from the downloaded repository, run
 ```
 
 ### Issues
-If you find any issues please raise [here](https://github.com/PRATAP-KUMAR/gdm-extension/issues)
+If you find any issues please raise [here](https://github.com/pratap-panabaka/gse-gdm-extension/issues)
 
 <hr/>
 
