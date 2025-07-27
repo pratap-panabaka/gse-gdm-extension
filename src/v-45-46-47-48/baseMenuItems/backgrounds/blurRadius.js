@@ -9,7 +9,7 @@ const blurRadius = (gdmExt, n) => {
     const item = new PopupMenu.PopupBaseMenuItem();
 
     inputText = new St.Entry({
-        hint_text: 'Enter Blur Brightness Value',
+        hint_text: 'Enter Blur Radius Value',
         text: String(gdmExt._settings.get_int(`blur-radius-${n}`)),
         track_hover: true,
         can_focus: true,

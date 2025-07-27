@@ -40,7 +40,7 @@ export default class GdmExtensionExtension extends Extension {
         // for disconnecting signals
         this._keys = this._settings.list_keys();
         this._keys.forEach(key => {
-            this[`_${key}_changedId`] = null;
+            this[`._${key}_changedId`] = null;
         });
         //
 
@@ -228,9 +228,9 @@ export default class GdmExtensionExtension extends Extension {
 
     _disconnectSignals() {
         this._keys.forEach(key => {
-            if (this[`_${key}_changedId`]) {
-                this._settings.disconnect(this[`_${key}_changedId`]);
-                this[`_${key}_changedId`] = null;
+            if (this[`._${key}_changedId`]) {
+                this._settings.disconnect(this[`._${key}_changedId`]);
+                this[`._${key}_changedId`] = null;
             }
         });
         this._keys = null;
