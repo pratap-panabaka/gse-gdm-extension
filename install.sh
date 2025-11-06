@@ -37,7 +37,7 @@ if [[ $SHELL_VERSION -ge 42 && $SHELL_VERSION -le 44 ]]
 then
     cd src/v-42-43-44
 else
-    cd src/v-45-46-47-48
+    cd src/v-45-46-47-48-49
 fi
 
 echo -e "\t2. Creating zip file from the directory ${PWD##*/}"
