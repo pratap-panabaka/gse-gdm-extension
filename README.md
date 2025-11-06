@@ -1,10 +1,14 @@
 ﻿# gdm-extension
 
 > [!CAUTION]
->Please note that this extension is experimental and is continously monitored on Arch Linux with gnome-shell ~~v45~~ ~~v46~~ ~~v47~~ ~~v48~~ v49.
+> Please note that this extension is experimental and is continously monitored on Arch Linux with gnome-shell ~~v45~~ ~~v46~~ ~~v47~~ ~~v48~~ v49.
+>
 > Rarely tested on Ubuntu and Debian.
 >
->Though this extension is being tested since Dec 2023, In very very rare case there could be a chance of being unable to reach even to TTY. In such a case, a bootable USB is required to remove this extension. So please make sure you have a bootable USB and some experience on how to mount drives and remove files with command line. This gdm-extension installs at 
+> Though this extension is being tested since Dec 2023 and in very very rare case there could be a chance of being unable to reach even to TTY. In such a case, a bootable USB is required to remove this extension.
+> So please make sure you have a bootable USB and some experience on how to mount drives and remove files with command line.
+>
+> Installation path:
 >```
 >/usr/local/share/gnome-shell/extensions/gdm-extension@pratap.fastmail.fm
 >```
@@ -13,7 +17,8 @@
 Customize background colors, images, blur for each monitor upto 4 monitors for GDM Login Screen from the login screen itself.  
 Customize Shell themes, Accent Colors, Icon themes, Fonts, Logo, Banner messages for GDM Login Screen from the login screen itself.
 
-### prerequisite packages
+### Prerequisites
+Please make sure to install these packages before installing the extension:
 1. `zip`
 2. `dbus-x11`
 3. `systemd-container`
@@ -23,11 +28,12 @@ Customize Shell themes, Accent Colors, Icon themes, Fonts, Logo, Banner messages
 git clone https://github.com/pratap-panabaka/gse-gdm-extension/
 cd gse-gdm-extension
 sudo ./install.sh
-
-# Observation: Occassionaly when system is crashed or due to someother system errors, this extension stops working. In such a case you need to run `sudo ./install.sh` again.
 ```
 
-### Preview of the gdm-extension (pics from Ubuntu 24.04 GDM Login Screen)
+`Observation`: Occassionaly when system is crashed or due to someother system errors, this extension stops working. In such a case you need to run `sudo ./install.sh` again.
+
+### Preview of the gdm-extension
+These images are from `Ubuntu 24.04` GDM Login Screen
 ![1](https://github.com/user-attachments/assets/cf26b8d2-525f-43f8-909d-593d259011f3)
 ![2](https://github.com/user-attachments/assets/624c3a96-bc18-4657-a421-8a0b502f9e00)
 ![3](https://github.com/user-attachments/assets/702e54b4-3019-4f6c-9ee2-f64657a0056b)
@@ -45,25 +51,28 @@ sudo ./install.sh
 3. For Each monitor you can choose different colors, backgroud image, blur, gradient horizontal and gradient vertical.
 4. For Background, you can set primary color and secondary color with gradient horizontal or vertical. 
 you have to enter a valid color for example,`#456789`, `blue` etc. You must be careful while entering these as they must be valid colors.
-5. Important is that, you have to **hit Enter** when you finish writing something in the entry box.
-6. Icon themes are collected from `["/usr/local/share/icons/", "/usr/share/icons"]` directories.
-7. Shell themes are collected from `["/usr/local/share/themes/", "/usr/share/themes"]` directories.
-8. Accent Colors - For GNOME 47 accent-colors feature added. If you wish to set topbar color with respect to accent-colors
+6. Important is that, you have to **hit Enter** when you finish writing something in the entry box.
+7. Icon themes are collected from `["/usr/local/share/icons/", "/usr/share/icons"]` directories.
+8. Shell themes are collected from `["/usr/local/share/themes/", "/usr/share/themes"]` directories.
+9. Accent Colors - For GNOME 47 accent-colors feature added. If you wish to set topbar color with respect to accent-colors
    uncomment the code for `#panel` in this extensions `stylesheet.css` file.
-9. Fonts are collected from `["/usr/local/share/fonts", "/usr/share/fonts]` directories.
-10. Fonts are filtered by `FontFamilyName` based on font file naming convention and `StyleName` is ignored by this extension.
-11. You can choose distribution logo from `["/usr/local/share/pixmaps", "/usr/share/pixmaps]` directories. 
+10. Fonts are collected from `["/usr/local/share/fonts", "/usr/share/fonts]` directories.
+11. Fonts are filtered by `FontFamilyName` based on font file naming convention and `StyleName` is ignored by this extension.
+12. You can choose distribution logo from `["/usr/local/share/pixmaps", "/usr/share/pixmaps]` directories. 
 Valid files with names which include "logo" are only shown.
-12. You can tweak some system settings from the System Settings menu like tap-to-click, show date, seconds, weekday, 
+13. You can tweak some system settings from the System Settings menu like tap-to-click, show date, seconds, weekday, 
 disable user list, disable restart buttons, show banner message.
-13. You can type banner message on the entry box provided. Make sure you **hit Enter** when you finish writing something in the entry box.
-14. Optionally you can overrride styling with extensions css file. for example
+14. You can type banner message on the entry box provided. Make sure you **hit Enter** when you finish writing something in the entry box.
+15. Optionally you can overrride styling with extensions css file. for example
     ```
     #panel {
       background-color: -st-accent-color;
     }
     ```
     Topbar/Panel color will syncronize with the accent-color now (Note that accent-color is introduced in GNOME 47, so for earlier versions Accent Color option will not be shown in this extensions menu.)
+
+### Going further on customization
+You can set an image as your login screen background, but it’s static by default wich means it will not change unless you do it yourself. To change that, @luicfrr created a step-by-step showing how to make it update dynamically (just like on Windows or macOS). Check it out [here](https://gist.github.com/luicfrr/c449e307e6116d8b08c9c9ee7f8620a7).
 
 ### Hiding the Preferences Icon from GDM Login Screen
 Once you enable the extension it is available for regular users too on the Login Screen.
