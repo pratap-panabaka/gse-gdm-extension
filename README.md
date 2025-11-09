@@ -44,7 +44,7 @@ Ensure the following are installed:
 ```bash
 git clone https://github.com/pratap-panabaka/gse-gdm-extension/
 cd gse-gdm-extension
-sudo ./install.sh
+sudo ./unistall.sh
 ```
 
 ### Uninstall
