@@ -44,7 +44,7 @@ Ensure the following are installed:
 ```bash
 git clone https://github.com/pratap-panabaka/gse-gdm-extension/
 cd gse-gdm-extension
-sudo ./unistall.sh
+sudo ./install.sh
 ```
 
 ### Hiding/Showing the gdm-extension button on login-screen
@@ -65,7 +65,7 @@ sudo dconf update
 
 ### Uninstall
 ```bash
-sudo ./install.sh
+sudo ./uninstall.sh
 ```
 
 ### Issues
