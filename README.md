@@ -1,7 +1,7 @@
 ﻿# gdm-extension
 
 > [!CAUTION]
-> This extension is **experimental** and primarily tested on Arch Linux with GNOME Shell v47. It has been rarely tested on Ubuntu and Debian.  
+> This extension is **experimental** and primarily tested on Arch Linux with GNOME Shell v42 and v49. It has been rarely tested on Ubuntu and Debian.  
 >
 > Although development has been ongoing since Dec 2023, in very rare cases, installing or using this extension could make it impossible to reach even TTY. In such a scenario, a **bootable USB** is required to remove the extension. Ensure you have a bootable USB and some experience mounting drives and removing files via the command line.  
 >
@@ -9,10 +9,14 @@
 > ```
 > /usr/local/share/gnome-shell/extensions/gdm-extension@pratap.fastmail.fm
 > ```
->
-> [!NOTE]
-> This extension assumes that **no other GNOME Shell extensions are enabled for the GDM user**.  
-> Users are responsible for managing the GDM database and configuring the GDM profile. Conflicts with other extensions or manual modifications may lead to **unexpected behavior**.
+
+> [!CAUTION]
+> 1. This extension assumes that **no other GNOME Shell extensions are enabled for the GDM user**.  
+> 2. In the installation process via script file, the script will remove any other dconf settings stored for GDM user.
+> 3. This script will take care enabling the gdm-extension, you dont need to do anything for the gdm-extension to work.  
+> 4. Users are responsible for managing the GDM database and configuring the GDM profile if you have specific requirments other than gdm-extension.
+> 5. see [this link for general idea](https://help.gnome.org/admin/system-admin-guide/stable/extensions-enable.html.en)
+> 6. Conflicts with other extensions or manual modifications may lead to **unexpected behavior**.
 
 ---
 
