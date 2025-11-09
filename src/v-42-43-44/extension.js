@@ -16,13 +16,13 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-const { Gio, St, Shell } = imports.gi;
+const {Gio, St, Shell} = imports.gi;
 const Main = imports.ui.main;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const { GdmExtension } = Me.imports.gdmExtension;
+const {GdmExtension} = Me.imports.gdmExtension;
 
 const THEME_DIRECTORIES = ['/usr/local/share/themes', '/usr/share/themes'];
 
@@ -36,7 +36,7 @@ class GdmExtensionExtension {
         this._keys = this._settings.list_keys();
         this._keys.forEach(key => {
             this[`_${key}_changedId`] = null;
-        })
+        });
         //
 
         this._indicator = new GdmExtension(this._settings); // Gdm Extension button
@@ -86,7 +86,7 @@ class GdmExtensionExtension {
             `blur-sigma-${n}`,
         ]
             .forEach(key => {
-                this[`_${key}_changedId`] = this._settings.connect(`changed::${key}`, this._onChangesFromGDMScreen.bind(this, n))
+                this[`_${key}_changedId`] = this._settings.connect(`changed::${key}`, this._onChangesFromGDMScreen.bind(this, n));
             });
     }
 
@@ -96,27 +96,27 @@ class GdmExtensionExtension {
         let n = 1;
         while (nMonitors > 0) {
             switch (n) {
-                case 1:
-                    this._callMonitorConnectionSettings(n);
-                    break;
-                case 2:
-                    this._callMonitorConnectionSettings(n);
-                    break;
-                case 3:
-                    this._callMonitorConnectionSettings(n);
-                    break;
-                case 4:
-                    this._callMonitorConnectionSettings(n);
-                    break;
-                default:
-                    break;
+            case 1:
+                this._callMonitorConnectionSettings(n);
+                break;
+            case 2:
+                this._callMonitorConnectionSettings(n);
+                break;
+            case 3:
+                this._callMonitorConnectionSettings(n);
+                break;
+            case 4:
+                this._callMonitorConnectionSettings(n);
+                break;
+            default:
+                break;
             }
             n += 1;
             nMonitors -= 1;
         }
 
-        let visibilityKey = "hide-gdm-extension-button";
-        let shellThemeKey = "shell-theme";
+        let visibilityKey = 'hide-gdm-extension-button';
+        let shellThemeKey = 'shell-theme';
         this[`_${visibilityKey}_changedId`] = this._settings.connect(`changed::${visibilityKey}`, this._onVisibilityChange.bind(this));
         this[`_${shellThemeKey}_changedId`] = this._settings.connect(`changed::${shellThemeKey}`, this._onShellThemeChanged.bind(this));
     }
@@ -138,7 +138,7 @@ class GdmExtensionExtension {
             name: 'gdm-extension-blur',
             brightness: blurBrightness,
             sigma: blurSigma * themeContext.scale_factor,
-        }
+        };
 
         let widget = new St.Widget({
             style: `
@@ -157,44 +157,44 @@ class GdmExtensionExtension {
         });
 
         switch (n) {
-            case 1:
-                m1Widget = widget;
-                break;
-            case 2:
-                m2Widget = widget;
-                break;
-            case 3:
-                m3Widget = widget;
-                break;
-            case 4:
-                m4Widget = widget;
-                break;
-            default:
-                break;
+        case 1:
+            m1Widget = widget;
+            break;
+        case 2:
+            m2Widget = widget;
+            break;
+        case 3:
+            m3Widget = widget;
+            break;
+        case 4:
+            m4Widget = widget;
+            break;
+        default:
+            break;
         }
         return widget;
     }
 
     _onChangesFromGDMScreen(n) {
         switch (n) {
-            case 1:
-                if (m1Widget)
-                    m1Widget.destroy();
-                break;
-            case 2:
-                if (m2Widget)
-                    m2Widget.destroy();
-                break;
-            case 3:
-                if (m3Widget)
-                    m3Widget.destroy();
-                break;
-            case 4:
-                if (m4Widget)
-                    m4Widget.destroy();
-                break;
-            default:
-                break;
+        case 1:
+            if (m1Widget)
+                m1Widget.destroy();
+            break;
+        case 2:
+            if (m2Widget)
+                m2Widget.destroy();
+            break;
+        case 3:
+            if (m3Widget)
+                m3Widget.destroy();
+            break;
+        case 4:
+            if (m4Widget)
+                m4Widget.destroy();
+            break;
+        default:
+            break;
         }
         Main.screenShield._lockDialogGroup.insert_child_below(this._createWidget(n), null);
     }
@@ -222,7 +222,7 @@ class GdmExtensionExtension {
                 this._settings.disconnect(this[`_${key}_changedId`]);
                 this[`_${key}_changedId`] = null;
             }
-        })
+        });
         this._keys = null;
     }
 

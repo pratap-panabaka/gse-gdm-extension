@@ -1,25 +1,24 @@
 
-const { Gio, St } = imports.gi;
+const {Gio, St} = imports.gi;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const { updateOrnament } = Me.imports.utils.updateOrnament;
-const { GetShellThemes } = Me.imports.getNamesAsync.getShellThemes;
+const {updateOrnament} = Me.imports.utils.updateOrnament;
+const {GetShellThemes} = Me.imports.getNamesAsync.getShellThemes;
 
 const THEME_DIRECTORIES = ['/usr/local/share/themes', '/usr/share/themes'];
 
-var subMenuShellThemes = (gdmExtension) => {
+var subMenuShellThemes = gdmExtension => {
     gdmExtension._subMenuMenuItemShellThemes = new PopupMenu.PopupSubMenuMenuItem('Shell Themes', false);
-    setShellThemes(gdmExtension)
+    setShellThemes(gdmExtension);
 
     return gdmExtension._subMenuMenuItemShellThemes;
-}
+};
 
-const setShellThemes = async (gdmExtension) => {
-
+const setShellThemes = async gdmExtension => {
     const item = gdmExtension._subMenuMenuItemShellThemes;
     const settings = gdmExtension._settings;
 
@@ -82,4 +81,4 @@ const setShellThemes = async (gdmExtension) => {
     const shellThemeItems = collectShellThemes(shellThemes);
     const text = settings.get_string('shell-theme') || 'Default';
     updateOrnament(shellThemeItems, text);
-}
+};

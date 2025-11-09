@@ -1,78 +1,168 @@
-#! /bin/bash
+#!/bin/bash
 set -e
 
-NAME=gdm-extension
-DOMAIN=pratap.fastmail.fm
-UUID=$NAME@$DOMAIN
-ZIP_NAME=$UUID.zip
+# ----------------------------
+# Configuration
+# ----------------------------
+NAME="gdm-extension"
+DOMAIN="pratap.fastmail.fm"
+UUID="$NAME@$DOMAIN"
+ZIP_NAME="$UUID.zip"
 
-# Findout gnome-shell version
-SHELL_VERSION=$(gnome-shell --version | cut -d ' ' -f3 | cut -d '.' -f1)
+# GDM user dconf files to remove
+GDM_USER_FILES=(
+    "/var/lib/gdm/.config/dconf/user"
+    "/var/lib/gdm/seat0/config/dconf/user"
+)
 
-if [[ $SHELL_VERSION -lt 42 ]]
-then
-    echo "This script is not for the gnome-shell versions below 42, Exiting with no changes."
-    exit 1
+# ----------------------------
+# Helper Functions
+# ----------------------------
+log() { echo -e "\t$1"; }
+error_exit() { echo -e "Error: $1"; exit 1; }
+
+# ----------------------------
+# Must be root
+# ----------------------------
+if [[ $(id -u) -ne 0 ]]; then
+    error_exit "You must be root to perform this action"
 fi
 
-if [[ $(id -u) -ne 0 ]]
-then
-    echo "You must be root to perform this action".
-    exit 1
+# Check required commands
+for cmd in gnome-shell zip unzip dconf glib-compile-schemas; do
+    command -v "$cmd" >/dev/null 2>&1 || error_exit "$cmd is required but not installed"
+done
+
+# ----------------------------
+# Detect GNOME Shell version
+# ----------------------------
+SHELL_VERSION=$(gnome-shell --version | awk '{print $3}' | cut -d. -f1)
+
+if [[ $SHELL_VERSION -lt 42 ]]; then
+    error_exit "This script is not for GNOME Shell versions below 42. Exiting."
 fi
 
-echo -e "\n\n\t~~~~~~~~~~~~~~~~ gdm-extension ~~~~~~~~~~~~~~~~\n"
-echo -e "\trunning the script...\n"
-echo -e "\t1. gnome-shell version $SHELL_VERSION detected"
+# ----------------------------
+# Print header
+# ----------------------------
+printf "\n\n\t~~~~~~~~~~~~~~~~ gdm-extension ~~~~~~~~~~~~~~~~\n"
+log "Running the script..."
+log "1. GNOME Shell version $SHELL_VERSION detected"
 
-# Findout if 'Debian-gdm' user exists, other wise use 'gdm'
-if [[ -z $(getent passwd Debian-gdm) ]]
-then
-	GDM_USER=gdm
+# ----------------------------
+# Select source directory
+# ----------------------------
+if [[ $SHELL_VERSION -ge 42 && $SHELL_VERSION -le 44 ]]; then
+    SRC_DIR="src/v-42-43-44"
+elif [[ $SHELL_VERSION -ge 45 && $SHELL_VERSION -le 49 ]]; then
+    SRC_DIR="src/v-45-46-47-48-49"
 else
-	GDM_USER=Debian-gdm
+    error_exit "Unsupported GNOME Shell version: $SHELL_VERSION"
 fi
 
-if [[ $SHELL_VERSION -ge 42 && $SHELL_VERSION -le 44 ]]
-then
-    cd src/v-42-43-44
+cd "$SRC_DIR" || error_exit "Source directory $SRC_DIR not found"
+
+# ----------------------------
+# Create ZIP file
+# ----------------------------
+log "2. Creating zip file from directory ${PWD##*/}"
+
+if zip -qr "$ZIP_NAME" ./*; then
+    log "3. Zip file created: $ZIP_NAME"
 else
-    cd src/v-45-46-47-48
+    error_exit "Failed to create zip file or directory is empty"
 fi
 
-echo -e "\t2. Creating zip file from the directory ${PWD##*/}"
+# ----------------------------
+# Install extension globally
+# ----------------------------
+EXT_DIR="/usr/local/share/gnome-shell/extensions/$UUID"
+mkdir -p "$EXT_DIR"
 
-zip -qr $ZIP_NAME ./* && echo -e "\t3. Zip file created"
+log "4. Installing the extension to $EXT_DIR"
+unzip -oq "$ZIP_NAME" -d "$EXT_DIR" || error_exit "Failed to unzip extension"
+rm -f "$ZIP_NAME"
 
-echo -e "\t4. Doing the main stuff\n"
+# ----------------------------
+# Step 4b: Remove GDM user dconf files if they exist
+# ----------------------------
+for file in "${GDM_USER_FILES[@]}"; do
+    if [[ -f "$file" ]]; then
+        log "4b. Removing GDM user dconf file $file"
+        rm -f "$file" || error_exit "Failed to remove $file"
+    else
+        log "4b. GDM user dconf file $file not found, skipping"
+    fi
+done
 
-rm -rf /usr/local/share/gnome-shell/extensions/$UUID
-rm -rf /usr/local/share/glib-2.0/schemas/gschemas.compiled
-mkdir -p /usr/local/share/gnome-shell/extensions
-mkdir -p /usr/local/share/glib-2.0/schemas
-gnome-extensions install -f $ZIP_NAME
-mv -f $HOME/.local/share/gnome-shell/extensions/$UUID/ /usr/local/share/gnome-shell/extensions/
-glib-compile-schemas /usr/local/share/gnome-shell/extensions/$UUID/schemas --targetdir /usr/local/share/glib-2.0/schemas
-rm -rf $ZIP_NAME
-xhost si:localuser:$GDM_USER > /dev/null
-sudo -u $GDM_USER dbus-launch dconf reset /org/gnome/shell/enabled-extensions
-sudo -u $GDM_USER dbus-launch dconf reset /org/gnome/shell/disabled-extensions
-sudo -u $GDM_USER dbus-launch dconf write /org/gnome/shell/enabled-extensions "@as ['$UUID']"
-sudo -u $GDM_USER dbus-launch dconf reset /org/gnome/desktop/peripherals/touchpad/tap-to-click
-sudo -u $GDM_USER dbus-launch dconf reset /org/gnome/desktop/interface/show-battery-percentage
-sudo -u $GDM_USER dbus-launch dconf reset /org/gnome/desktop/interface/clock-show-date
-sudo -u $GDM_USER dbus-launch dconf reset /org/gnome/desktop/interface/clock-show-seconds
-sudo -u $GDM_USER dbus-launch dconf reset /org/gnome/desktop/interface/clock-show-weekday
-sudo -u $GDM_USER dbus-launch dconf reset /org/gnome/desktop/interface/clock-format
-sudo -u $GDM_USER dbus-launch dconf reset /org/gnome/login-screen/disable-restart-buttons
-sudo -u $GDM_USER dbus-launch dconf reset /org/gnome/login-screen/disable-user-list
-sudo -u $GDM_USER dbus-launch dconf reset /org/gnome/login-screen/banner-message-enable
-sudo -u $GDM_USER dbus-launch dconf reset /org/gnome/login-screen/logo
-xhost -si:localuser:$GDM_USER > /dev/null
-echo -e "\tgdm-extension is installed. You can set below for GDM Login Screen from the login screen itself\n
-\t1. icon-theme
-\t2. shell-theme
-\t3. fonts
-\t4. background with color, gradient or image with blur for multi-monitors"
-echo -e "\n\t~~~~~~~~~~~~~~~~~~ Thank You ~~~~~~~~~~~~~~~~~~\n"
+# ----------------------------
+# Compile GSettings schemas if present
+# ----------------------------
+if [[ -d "$EXT_DIR/schemas" ]]; then
+    log "5. Compiling GSettings schemas"
+    glib-compile-schemas "$EXT_DIR/schemas" || error_exit "Failed to compile GSettings schemas"
+else
+    log "5. No GSettings schemas found, skipping compilation"
+fi
+
+# ----------------------------
+# Ensure GDM dconf profile exists
+# ----------------------------
+DCONF_PROFILE="/etc/dconf/profile/gdm"
+
+if [[ ! -f "$DCONF_PROFILE" ]]; then
+    log "6. Creating missing GDM dconf profile at $DCONF_PROFILE"
+    echo -e "user-db:user\nsystem-db:gdm" > "$DCONF_PROFILE" || \
+        error_exit "Failed to create $DCONF_PROFILE"
+else
+    log "6. GDM dconf profile already exists: $DCONF_PROFILE"
+fi
+
+# ----------------------------
+# Ensure GDM dconf database folder exists
+# ----------------------------
+DCONF_DB_DIR="/etc/dconf/db/gdm.d"
+
+if [[ ! -d "$DCONF_DB_DIR" ]]; then
+    log "7. Creating missing GDM dconf database directory at $DCONF_DB_DIR"
+    mkdir -p "$DCONF_DB_DIR" || error_exit "Failed to create directory $DCONF_DB_DIR"
+else
+    log "7. GDM dconf database directory already exists: $DCONF_DB_DIR"
+fi
+
+# ----------------------------
+# Create or replace GDM extension dconf file
+# ----------------------------
+DCONF_FILE="$DCONF_DB_DIR/99-gdm-extension"
+
+log "8. Creating/updating GDM extension dconf file at $DCONF_FILE"
+
+cat <<EOF > "$DCONF_FILE"
+[org/gnome/shell]
+enabled-extensions=['$UUID']
+
+[org/gnome/shell/extensions/$NAME]
+hide-gdm-extension-button=false
+EOF
+
+log "8. GDM extension dconf file created/updated successfully"
+
+# ----------------------------
+# Apply dconf changes
+# ----------------------------
+log "9. Updating dconf database"
+dconf update || error_exit "Failed to update dconf database"
+log "9. dconf database updated successfully"
+
+# ----------------------------
+# Completion message
+# ----------------------------
+log "gdm-extension is installed globally at $EXT_DIR. You can customize the GDM login screen for:"
+echo -e "\n\t1. icon-theme"
+echo -e "\t2. shell-theme"
+echo -e "\t3. fonts"
+echo -e "\t4. background (color, gradient, or image with blur for multi-monitors)"
+printf "\n\t~~~~~~~~~~~~~~~~~~ Thank You ~~~~~~~~~~~~~~~~~~\n"
+
 exit 0
+

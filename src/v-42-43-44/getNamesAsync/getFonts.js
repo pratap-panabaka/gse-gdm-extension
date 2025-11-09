@@ -15,7 +15,7 @@ const {Gio, GObject} = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const { recursiveFileOperation, recursiveGetFileNamesCallback } = Me.imports.utils.recursiveFileOperation;
+const {recursiveFileOperation, recursiveGetFileNamesCallback} = Me.imports.utils.recursiveFileOperation;
 
 const FONT_DIRECTORIES = ['/usr/local/share/fonts', '/usr/share/fonts'];
 

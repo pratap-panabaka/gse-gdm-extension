@@ -1,23 +1,23 @@
-const { Gio, St } = imports.gi;
+const {Gio, St} = imports.gi;
 const PopupMenu = imports.ui.popupMenu;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const { updateOrnament } = Me.imports.utils.updateOrnament;
-const { GetLogos } = Me.imports.getNamesAsync.getLogos;
+const {updateOrnament} = Me.imports.utils.updateOrnament;
+const {GetLogos} = Me.imports.getNamesAsync.getLogos;
 
 const LOGIN_SCREEN_SCHEMA = 'org.gnome.login-screen';
-const dconfLoginSettings = new Gio.Settings({ schema_id: LOGIN_SCREEN_SCHEMA });
+const dconfLoginSettings = new Gio.Settings({schema_id: LOGIN_SCREEN_SCHEMA});
 
-var subMenuLogos = (gdmExtension) => {
+var subMenuLogos = gdmExtension => {
     gdmExtension._subMenuMenuItemLogos = new PopupMenu.PopupSubMenuMenuItem('Logo (small icon at bottom of login screen)', false);
-    setLogos(gdmExtension._subMenuMenuItemLogos)
+    setLogos(gdmExtension._subMenuMenuItemLogos);
 
     return gdmExtension._subMenuMenuItemLogos;
-}
+};
 
-const setLogos = async (item) => {
+const setLogos = async item => {
     const scrollView = new St.ScrollView();
     const section = new PopupMenu.PopupMenuSection();
 
@@ -56,6 +56,6 @@ const setLogos = async (item) => {
     };
 
     const logoItems = collectLogos(LOGOS);
-    const text = dconfLoginSettings.get_string('logo') || 'None'
+    const text = dconfLoginSettings.get_string('logo') || 'None';
     updateOrnament(logoItems, text);
-}
+};

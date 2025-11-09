@@ -1,4 +1,4 @@
-const { Clutter, GObject, GLib, St } = imports.gi;
+const {Clutter, GObject, GLib, St} = imports.gi;
 
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
@@ -7,13 +7,12 @@ const Config = imports.misc.config;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const { hideExtensionButton } = Me.imports.buttons.hideExtensionButton;
-const { subMenuSystemSettings } = Me.imports.menus.subMenuSystemSettings;
-const { subMenuMonitorBackgrounds } = Me.imports.menus.subMenuMonitorBackgrounds;
-const { subMenuIconThemes } = Me.imports.menus.subMenuIconThemes;
-const { subMenuShellThemes } = Me.imports.menus.subMenuShellThemes;
-const { subMenuLogos } = Me.imports.menus.subMenuLogos;
-const { subMenuFonts } = Me.imports.menus.subMenuFonts;
+const {subMenuSystemSettings} = Me.imports.menus.subMenuSystemSettings;
+const {subMenuMonitorBackgrounds} = Me.imports.menus.subMenuMonitorBackgrounds;
+const {subMenuIconThemes} = Me.imports.menus.subMenuIconThemes;
+const {subMenuShellThemes} = Me.imports.menus.subMenuShellThemes;
+const {subMenuLogos} = Me.imports.menus.subMenuLogos;
+const {subMenuFonts} = Me.imports.menus.subMenuFonts;
 
 var GdmExtension = GObject.registerClass(
     class GdmExtension extends PanelMenu.Button {
@@ -29,8 +28,8 @@ var GdmExtension = GObject.registerClass(
                 style_class: 'system-status-icon',
             }));
 
-            this._customLabel = "gdm-extension";
-            this._box.add_child(new St.Label({ text: this._customLabel, y_align: Clutter.ActorAlign.CENTER }));
+            this._customLabel = 'gdm-extension';
+            this._box.add_child(new St.Label({text: this._customLabel, y_align: Clutter.ActorAlign.CENTER}));
 
             this._subMenuMonitorBackgrounds();  // Monitor background settings
 
@@ -48,9 +47,6 @@ var GdmExtension = GObject.registerClass(
 
             const generateLogos = subMenuLogos(this);
             this.menu.addMenuItem(generateLogos); // Logos
-
-            const generateHideExtensionButton = hideExtensionButton(this);
-            this.menu.addMenuItem(generateHideExtensionButton); // Extension Hide Button
         }
 
         _subMenuMonitorBackgrounds() {

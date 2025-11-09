@@ -1,25 +1,25 @@
 
-const { Gio, St } = imports.gi;
+const {Gio, St} = imports.gi;
 const PopupMenu = imports.ui.popupMenu;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const { updateOrnament } = Me.imports.utils.updateOrnament;
-const { GetIconThemes } = Me.imports.getNamesAsync.getIconThemes;
+const {updateOrnament} = Me.imports.utils.updateOrnament;
+const {GetIconThemes} = Me.imports.getNamesAsync.getIconThemes;
 
 const DESKTOP_SCHEMA = 'org.gnome.desktop.interface';
 
-const dconfDesktopSettings = new Gio.Settings({ schema_id: DESKTOP_SCHEMA });
+const dconfDesktopSettings = new Gio.Settings({schema_id: DESKTOP_SCHEMA});
 
-var subMenuIconThemes = (gdmExtension) => {
+var subMenuIconThemes = gdmExtension => {
     gdmExtension._subMenuMenuItemIconThemes = new PopupMenu.PopupSubMenuMenuItem('Icon Themes', false);
-    setIconThemes(gdmExtension._subMenuMenuItemIconThemes)
+    setIconThemes(gdmExtension._subMenuMenuItemIconThemes);
 
     return gdmExtension._subMenuMenuItemIconThemes;
-}
+};
 
-const setIconThemes = async (item) => {
+const setIconThemes = async item => {
     const scrollView = new St.ScrollView();
     const section = new PopupMenu.PopupMenuSection();
 
@@ -49,4 +49,4 @@ const setIconThemes = async (item) => {
     const iconItems = collectIconThemes(ICONS);
     const text = dconfDesktopSettings.get_string('icon-theme');
     updateOrnament(iconItems, text);
-}
+};

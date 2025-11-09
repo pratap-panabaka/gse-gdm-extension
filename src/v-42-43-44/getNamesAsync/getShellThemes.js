@@ -10,12 +10,12 @@
 // source code: https://extensions.gnome.org/extension/19/user-themes/
 // Below code is tweaked by PRATAP PANABAKA <pratap@fastmail.fm>
 
-const { Gio, GObject, GLib } = imports.gi;
+const {Gio, GObject, GLib} = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const { enumerateDir } = Me.imports.utils.enumerateDir;
+const {enumerateDir} = Me.imports.utils.enumerateDir;
 
 const THEME_DIRECTORIES = ['/usr/local/share/themes', '/usr/share/themes'];
 
@@ -27,7 +27,7 @@ var GetShellThemes = GObject.registerClass(
             const shellThemes = [];
             for (const dirName of THEME_DIRECTORIES) {
                 const dir = Gio.File.new_for_path(dirName);
-                if (dir.query_exists(null))
+                if (dir.query_exists(null)) {
                     for (const name of await enumerateDir(dir)) {
                         const file = dir.resolve_relative_path(
                             `${name}/gnome-shell/gnome-shell.css`);
@@ -42,6 +42,7 @@ var GetShellThemes = GObject.registerClass(
                                 logError(e);
                         }
                     }
+                }
             }
             return shellThemes;
         }

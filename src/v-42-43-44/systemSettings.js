@@ -1,5 +1,5 @@
 // import {ATIndicator} from 'resource:///org/gnome/shell/ui/status/accessibility.js';
-const { ATIndicator } = imports.ui.status.accessibility;
+const {ATIndicator} = imports.ui.status.accessibility;
 
 const TAP_TO_CLICK_SCHEMA = 'org.gnome.desktop.peripherals.touchpad';
 const LOGIN_SCREEN_SCHEMA = 'org.gnome.login-screen';

@@ -11,12 +11,12 @@
 // Below code is edited by PRATAP PANABAKA <pratap@fastmail.fm>
 
 
-const { Gio, GObject } = imports.gi;
+const {Gio, GObject} = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const { enumerateDir } = Me.imports.utils.enumerateDir;
+const {enumerateDir} = Me.imports.utils.enumerateDir;
 
 const ICON_DIRECTORIES = ['/usr/local/share/icons', '/usr/share/icons'];
 
@@ -26,9 +26,10 @@ var GetIconThemes = GObject.registerClass(
             const iconThemes = [];
             for (const dirName of ICON_DIRECTORIES) {
                 const dir = Gio.File.new_for_path(dirName);
-                if (dir.query_exists(null))
+                if (dir.query_exists(null)) {
                     for (const name of await enumerateDir(dir))
-                        iconThemes.push(name); // push all Icon folder names
+                        iconThemes.push(name);
+                } // push all Icon folder names
             }
             return iconThemes;
         }

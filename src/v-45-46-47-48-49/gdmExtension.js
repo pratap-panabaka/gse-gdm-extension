@@ -6,8 +6,6 @@ import St from 'gi://St';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 
-import hideExtensionButton from './buttons/hideExtensionButton.js';
-
 // menus
 import backgroundsMenu from './menus/backgroundsMenu.js';
 import shellThemesMenu from './menus/shellThemesMenu.js';
@@ -48,9 +46,8 @@ const gdmExtension = GObject.registerClass(
             const icons = await this._createIconThemesMenu(); // create icon themes menu
             const fonts = await this._createFontsMenu(); // create fonts menu
             const logos = await this._createLogosMenu(); // creat logos menu
-            const hideExtButton = this._createHideExtensionButton(); // create hide extension button
 
-            Promise.all([monitors, systemSettings, accentColors, shellThemes, icons, fonts, logos, hideExtButton])
+            Promise.all([monitors, systemSettings, accentColors, shellThemes, icons, fonts, logos])
                 .then(promises => {
                     promises.forEach(promise => {
                         if (promise) {
@@ -64,11 +61,6 @@ const gdmExtension = GObject.registerClass(
                         }
                     });
                 });
-        }
-
-        _createHideExtensionButton() {
-            let menuItem = hideExtensionButton(this);
-            return menuItem;
         }
 
         _createSystemSettingsMenu() {

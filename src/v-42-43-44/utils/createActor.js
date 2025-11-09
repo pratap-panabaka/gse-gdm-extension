@@ -1,4 +1,4 @@
-const { St, Clutter } = imports.gi;
+const {St, Clutter} = imports.gi;
 
 const PopupMenu = imports.ui.popupMenu;
 
@@ -20,11 +20,11 @@ var createActor = (settings, label, hintText, key, permenentHint = null) => {
     });
     menuItem.connect('notify::active', () => inputText.grab_key_focus());
 
-    menuItem.add_child(new St.Label({ text: label, y_align: Clutter.ActorAlign.CENTER }));
+    menuItem.add_child(new St.Label({text: label, y_align: Clutter.ActorAlign.CENTER}));
     menuItem.add_child(inputText);
 
     if (permenentHint)
-        menuItem.add_child(new St.Label({ text: permenentHint, y_align: Clutter.ActorAlign.CENTER }));
+        menuItem.add_child(new St.Label({text: permenentHint, y_align: Clutter.ActorAlign.CENTER}));
 
     return menuItem;
 };

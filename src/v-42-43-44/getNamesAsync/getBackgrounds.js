@@ -10,12 +10,12 @@
 // source code: https://extensions.gnome.org/extension/19/user-themes/
 // Below code is tweaked by PRATAP PANABAKA <pratap@fastmail.fm>
 
-const { Gio, GObject } = imports.gi;
+const {Gio, GObject} = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const { recursiveFileOperation, recursiveGetFileNamesCallback } = Me.imports.utils.recursiveFileOperation;
+const {recursiveFileOperation, recursiveGetFileNamesCallback} = Me.imports.utils.recursiveFileOperation;
 
 const BACKGROUND_DIRECTORIES = ['/usr/local/share/backgrounds', '/usr/share/backgrounds'];
 
@@ -43,7 +43,7 @@ var GetBackgrounds = GObject.registerClass(
                         name.endsWith('.PNG') ||
                         name.endsWith('.GIF') ||
                         name.endsWith('.WEBP')
-                )
+                );
 
             return filtered;
         }

@@ -1,4 +1,4 @@
-const { GObject } = imports.gi;
+const {GObject} = imports.gi;
 const Slider = imports.ui.slider;
 const PopupMenu = imports.ui.popupMenu;
 
@@ -43,8 +43,7 @@ var Sliding = GObject.registerClass(
 
             if (this._dconfKey.startsWith('blur-brightness')) {
                 this._settings.set_double(this._dconfKey, percent);
-            }
-            else {
+            } else {
                 this._holdValueForIntDoubleConversion = percent * 100;
                 this._settings.set_int(this._dconfKey, Math.floor(percent * 100));
             }

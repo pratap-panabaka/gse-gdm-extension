@@ -1,4 +1,4 @@
-const { GLib, Gio } = imports.gi;
+const {GLib, Gio} = imports.gi;
 
 /* Gio.File */
 Gio._promisify(Gio.File.prototype, 'enumerate_children_async');
@@ -9,29 +9,28 @@ Gio._promisify(Gio.FileEnumerator.prototype, 'next_files_async');
 
 var recursiveGetFileNamesCallback = async (file, fileType, array, type) => {
     switch (fileType) {
-
-        case Gio.FileType.REGULAR: {
-            if (type === 'bg') {
-                array.push(file.get_uri());
-            } else {
-                const fileInfo = await file.query_info_async(
-                    'standard::*',
-                    Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
-                    GLib.PRIORITY_DEFAULT,
-                    null
-                );
-                array.push(fileInfo.get_name());
-            }
-            return;
+    case Gio.FileType.REGULAR: {
+        if (type === 'bg') {
+            array.push(file.get_uri());
+        } else {
+            const fileInfo = await file.query_info_async(
+                'standard::*',
+                Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
+                GLib.PRIORITY_DEFAULT,
+                null
+            );
+            array.push(fileInfo.get_name());
         }
+        return;
+    }
 
-        case Gio.FileType.DIRECTORY: {
-            // eslint-disable-next-line
+    case Gio.FileType.DIRECTORY: {
+        // eslint-disable-next-line
             return recursiveFileOperation(file, recursiveGetFileNamesCallback, array, type);
-        }
+    }
 
-        default:
-            // eslint-disable-next-line
+    default:
+        // eslint-disable-next-line
             return null;
     }
 };
@@ -43,6 +42,7 @@ var recursiveGetFileNamesCallback = async (file, fileType, array, type) => {
  * @param {Function} callback - a function that will be passed the file,
  *     file type (e.g. regular, directory), and @cancellable
  * @param {object} array - array to hold font file names
+ * @param type
  * @returns {Promise} a Promise for the operation
  */
 async function recursiveFileOperation(file, callback, array, type) {

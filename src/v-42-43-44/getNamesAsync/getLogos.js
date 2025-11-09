@@ -10,12 +10,12 @@
 // source code: https://extensions.gnome.org/extension/19/user-themes/
 // Below code is edited by PRATAP PANABAKA <pratap@fastmail.fm>
 
-const { Gio, GObject } = imports.gi;
+const {Gio, GObject} = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const { enumerateFiles } = Me.imports.utils.enumerateFiles;
+const {enumerateFiles} = Me.imports.utils.enumerateFiles;
 
 const LOGO_DIRECTORIES = ['/usr/local/share/pixmaps', '/usr/share/pixmaps'];
 
@@ -25,7 +25,7 @@ var GetLogos = GObject.registerClass(
             const logos = [];
             for (const dirName of LOGO_DIRECTORIES) {
                 const dir = Gio.File.new_for_path(dirName);
-                if (dir.query_exists(null))
+                if (dir.query_exists(null)) {
                     for (const name of await enumerateFiles(dir)) {
                         if (
                             name.endsWith('.jpg') ||
@@ -38,12 +38,12 @@ var GetLogos = GObject.registerClass(
                             name.endsWith('.PNG') ||
                             name.endsWith('.SVG') ||
                             name.endsWith('GIF')
-                        ) {
+                        )
                             logos.push(`${dirName}/${name}`); // push all file names
-                        }
                     }
+                }
             }
             return logos;
         }
     }
-)
+);

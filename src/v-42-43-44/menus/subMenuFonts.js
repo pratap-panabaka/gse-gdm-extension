@@ -1,23 +1,23 @@
-const { Gio, St } = imports.gi;
+const {Gio, St} = imports.gi;
 const PopupMenu = imports.ui.popupMenu;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const { updateOrnament } = Me.imports.utils.updateOrnament;
-const { GetFonts } = Me.imports.getNamesAsync.getFonts;
+const {updateOrnament} = Me.imports.utils.updateOrnament;
+const {GetFonts} = Me.imports.getNamesAsync.getFonts;
 
 const DESKTOP_SCHEMA = 'org.gnome.desktop.interface';
-const dconfDesktopSettings = new Gio.Settings({ schema_id: DESKTOP_SCHEMA });
+const dconfDesktopSettings = new Gio.Settings({schema_id: DESKTOP_SCHEMA});
 
-var subMenuFonts = (gdmExtension) => {
+var subMenuFonts = gdmExtension => {
     gdmExtension._subMenuMenuItemFonts = new PopupMenu.PopupSubMenuMenuItem('Fonts', false);
-    setFonts(gdmExtension._subMenuMenuItemFonts)
+    setFonts(gdmExtension._subMenuMenuItemFonts);
 
     return gdmExtension._subMenuMenuItemFonts;
-}
+};
 
-const setFonts = async (item) => {
+const setFonts = async item => {
     const scrollView = new St.ScrollView();
     const section = new PopupMenu.PopupMenuSection();
 
@@ -47,4 +47,4 @@ const setFonts = async (item) => {
     const fontItems = colletFonts(FONTS);
     const text = dconfDesktopSettings.get_string('font-name').split(' ').slice(0, -1).join(' ');
     updateOrnament(fontItems, text);
-}
+};
