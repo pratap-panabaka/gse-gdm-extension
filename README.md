@@ -10,13 +10,23 @@
 > /usr/local/share/gnome-shell/extensions/gdm-extension@pratap.fastmail.fm
 > ```
 
-> [!CAUTION]
+> [!WARNING]
 > 1. This extension assumes that **no other GNOME Shell extensions are enabled for the GDM user**.  
 > 2. In the installation process via script file, the script will remove any other dconf settings stored for GDM user.
 > 3. This script will take care enabling the gdm-extension, you dont need to do anything for the gdm-extension to work.  
 > 4. Users are responsible for managing the GDM database and configuring the GDM profile if you have specific requirments other than gdm-extension.
 > 5. see [this link](https://help.gnome.org/admin/system-admin-guide/stable/extensions-enable.html.en) for general idea.
 > 6. Conflicts with other extensions or manual modifications may lead to **unexpected behavior**.
+
+> [!IMPORTANT]
+> On the login screen > sub menus, the data is collected from, for
+> 1. bakcgrounds: `['/usr/local/share/backgrounds', '/usr/share/backgrounds']`
+> 2. fonts: `['/usr/local/share/fonts', '/usr/share/fonts']`
+> 3. icon-themes: `['/usr/local/share/icons', '/usr/share/icons']`
+> 4. shell-themes: `['/usr/local/share/themes', '/usr/share/themes']`
+> 5. logos: `['/usr/local/share/pixmaps', '/usr/share/pixmaps']`, logo file name must include logo otherwise that is not picked.
+> 
+> This means, if you have custom `background images`, `fonts`, `icon-themes`, `shell-themes`, `logos`, they must be in above folders and for logo (the small icon at the bottom of GDM screen) the file name must include "logo". Otherwise they are not picked.
 
 ---
 
