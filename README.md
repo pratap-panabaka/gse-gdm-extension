@@ -63,10 +63,9 @@ sudo nano /etc/dconf/db/gdm.d/99-gdm-extension
 ```
 
 change the key to `true` if you want to hide the button, or `false` to show the button, default is `false`
-```
-[org/gnome/shell/extensions/gdm-extension]
-hide-gdm-extension-button=true
-```
+
+> [org/gnome/shell/extensions/gdm-extension]  
+> hide-gdm-extension-button=true
 
 ```bash
 Ctrl+x, y, Enter
