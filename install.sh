@@ -162,6 +162,7 @@ echo -e "\n\t1. icon-theme"
 echo -e "\t2. shell-theme"
 echo -e "\t3. fonts"
 echo -e "\t4. background (color, gradient, or image with blur for multi-monitors)"
+echo -e "\t5. logo (the small icon at the bottom of the GDM screen)"
 printf "\n\t~~~~~~~~~~~~~~~~~~ Thank You ~~~~~~~~~~~~~~~~~~\n"
 
 exit 0
