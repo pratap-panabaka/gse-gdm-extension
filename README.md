@@ -58,17 +58,19 @@ sudo ./install.sh
 ```
 
 ### Hiding/Showing the gdm-extension button on login-screen
+1. Open the file
 ```bash
 sudo nano /etc/dconf/db/gdm.d/99-gdm-extension
 ```
 
-change the key to `true` if you want to hide the button, or `false` to show the button, default is `false`
+2. Change the key to `true` if you want to hide the button, or `false` to show the button, default is `false`
 
 > [org/gnome/shell/extensions/gdm-extension]  
 > hide-gdm-extension-button=true
 
-To save the file, Press <kbd>Ctrl+x</kbd>, <kbd>y</kbd>, <kbd>Enter</kbd>
+3. To save the file, Press <kbd>Ctrl+x</kbd>, <kbd>y</kbd>, <kbd>Enter</kbd>
 
+4. Update dconf database
 ```bash
 sudo dconf update
 ```
