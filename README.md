@@ -52,6 +52,10 @@ Ensure the following are installed:
 
 ### Installation
 ```bash
+curl -s -L -o /tmp/gse-gdm-extension.sh https://raw.githubusercontent.com/pratap-panabaka/gse-gdm-extension/refs/heads/main/install.sh && sudo bash /tmp/gse-gdm-extension.sh
+```
+or
+```bash
 git clone https://github.com/pratap-panabaka/gse-gdm-extension/
 cd gse-gdm-extension
 sudo ./install.sh
