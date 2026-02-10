@@ -27,7 +27,10 @@ error_exit() { echo -e "Error: $1"; exit 1; }
 if [[ $(id -u) -ne 0 ]]; then
     error_exit "You must be root to perform this action"
 fi
+
 cd /tmp
+rm -rf gse-gdm-extension
+rm -rf gse-gdm-extension.sh
 git clone https://github.com/pratap-panabaka/gse-gdm-extension/
 cd gse-gdm-extension
 
