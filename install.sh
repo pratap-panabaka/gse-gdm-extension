@@ -27,6 +27,9 @@ error_exit() { echo -e "Error: $1"; exit 1; }
 if [[ $(id -u) -ne 0 ]]; then
     error_exit "You must be root to perform this action"
 fi
+cd /tmp
+git clone https://github.com/pratap-panabaka/gse-gdm-extension/
+cd gse-gdm-extension
 
 # Check required commands
 for cmd in gnome-shell zip unzip dconf glib-compile-schemas; do
