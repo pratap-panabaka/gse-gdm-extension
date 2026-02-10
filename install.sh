@@ -171,5 +171,9 @@ echo -e "\t4. background (color, gradient, or image with blur for multi-monitors
 echo -e "\t5. logo (the small icon at the bottom of the GDM screen)"
 printf "\n\t~~~~~~~~~~~~~~~~~~ Thank You ~~~~~~~~~~~~~~~~~~\n"
 
+# removes the clone
+rm -rf gse-gdm-extension
+rm -rf gse-gdm-extension.sh
+
 exit 0
 
