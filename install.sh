@@ -24,7 +24,6 @@ error_exit() { echo -e "Error: $1"; exit 1; }
 
 cd /tmp
 rm -rf gse-gdm-extension
-rm gse-gdm-extension.sh
 git clone https://github.com/pratap-panabaka/gse-gdm-extension/
 cd gse-gdm-extension
 
@@ -174,7 +173,7 @@ printf "\n\t~~~~~~~~~~~~~~~~~~ Thank You ~~~~~~~~~~~~~~~~~~\n"
 
 # removes the clone
 rm -rf gse-gdm-extension
-rm gse-gdm-extension.sh
+rm -rf gse-gdm-extension.sh
 
 exit 0
 
