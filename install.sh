@@ -22,17 +22,17 @@ log() { echo -e "\t$1"; }
 error_exit() { echo -e "Error: $1"; exit 1; }
 
 
-cd /tmp
-rm -rf gse-gdm-extension
-git clone https://github.com/pratap-panabaka/gse-gdm-extension/
-cd gse-gdm-extension
-
 # ----------------------------
 # Must be root
 # ----------------------------
 if [[ $(id -u) -ne 0 ]]; then
     error_exit "You must be root to perform this action"
 fi
+
+cd /tmp
+rm -rf gse-gdm-extension
+git clone https://github.com/pratap-panabaka/gse-gdm-extension/ /tmp/gse-gdm-extension
+cd gse-gdm-extension
 
 # Check required commands
 for cmd in gnome-shell zip unzip dconf glib-compile-schemas; do
@@ -172,8 +172,8 @@ echo -e "\t5. logo (the small icon at the bottom of the GDM screen)"
 printf "\n\t~~~~~~~~~~~~~~~~~~ Thank You ~~~~~~~~~~~~~~~~~~\n"
 
 # removes the clone
-rm -rf gse-gdm-extension
-rm -rf gse-gdm-extension.sh
+rm -rf /tmp/gse-gdm-extension
+rm -rf /tmp/gse-gdm-extension.sh
 
 exit 0
 
