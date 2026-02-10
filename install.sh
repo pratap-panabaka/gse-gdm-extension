@@ -21,18 +21,19 @@ GDM_USER_FILES=(
 log() { echo -e "\t$1"; }
 error_exit() { echo -e "Error: $1"; exit 1; }
 
+
+cd /tmp
+rm -rf gse-gdm-extension
+rm gse-gdm-extension.sh
+git clone https://github.com/pratap-panabaka/gse-gdm-extension/
+cd gse-gdm-extension
+
 # ----------------------------
 # Must be root
 # ----------------------------
 if [[ $(id -u) -ne 0 ]]; then
     error_exit "You must be root to perform this action"
 fi
-
-cd /tmp
-rm -rf gse-gdm-extension
-rm -rf gse-gdm-extension.sh
-git clone https://github.com/pratap-panabaka/gse-gdm-extension/
-cd gse-gdm-extension
 
 # Check required commands
 for cmd in gnome-shell zip unzip dconf glib-compile-schemas; do
@@ -173,7 +174,7 @@ printf "\n\t~~~~~~~~~~~~~~~~~~ Thank You ~~~~~~~~~~~~~~~~~~\n"
 
 # removes the clone
 rm -rf gse-gdm-extension
-rm -rf gse-gdm-extension.sh
+rm gse-gdm-extension.sh
 
 exit 0
 
