@@ -7,12 +7,13 @@
     "46",
     "47",
     "48",
-    "49"
+    "49",
+    "50"
   ],
   "url": "https://github.com/pratap-panabaka/gse-gdm-extension/",
   "settings-schema": "org.gnome.shell.extensions.gdm-extension",
   "session-modes": [
     "gdm"
   ],
-  "version": 6
+  "version": 7
 }
