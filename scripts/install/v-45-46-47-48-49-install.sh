@@ -8,7 +8,7 @@ NAME="gdm-extension"
 DOMAIN="pratap.fastmail.fm"
 UUID="$NAME@$DOMAIN"
 ZIP_NAME="$UUID.zip"
-SRC_DIR="src/v-45-46-47-48-49"
+SRC_DIR="src/v-45-46-47-48-49-50"
 
 GDM_USER_FILES=(
     "/var/lib/gdm/.config/dconf/user"
