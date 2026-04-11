@@ -23,7 +23,7 @@ import Shell from 'gi://Shell';
 
 // Resources
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 // Local
 import GdmExtension from './gdmExtension.js';
@@ -65,7 +65,9 @@ export default class GdmExtensionExtension extends Extension {
         Main.setThemeStylesheet(styleSheet);
         Main.loadTheme();
 
-        this._starupPreparedId = Main.layoutManager.connect('startup-prepared', () => this._applyMonitorSettings());
+        const emitSignal = GNOME_SHELL_VERSION >= 50 ? 'startup-complete' : 'startup-prepared';
+
+        this._starupPreparedId = Main.layoutManager.connect(emitSignal, () => this._applyMonitorSettings());
         this._monitorsChangedId = Main.layoutManager.connect('monitors-changed', () => this._applyMonitorSettings());
     }
 
@@ -101,20 +103,20 @@ export default class GdmExtensionExtension extends Extension {
         let n = 1;
         while (nMonitors > 0) {
             switch (n) {
-            case 1:
-                this._callMonitorConnectionSettings(n);
-                break;
-            case 2:
-                this._callMonitorConnectionSettings(n);
-                break;
-            case 3:
-                this._callMonitorConnectionSettings(n);
-                break;
-            case 4:
-                this._callMonitorConnectionSettings(n);
-                break;
-            default:
-                break;
+                case 1:
+                    this._callMonitorConnectionSettings(n);
+                    break;
+                case 2:
+                    this._callMonitorConnectionSettings(n);
+                    break;
+                case 3:
+                    this._callMonitorConnectionSettings(n);
+                    break;
+                case 4:
+                    this._callMonitorConnectionSettings(n);
+                    break;
+                default:
+                    break;
             }
             n += 1;
             nMonitors -= 1;
@@ -166,44 +168,44 @@ export default class GdmExtensionExtension extends Extension {
         });
 
         switch (n) {
-        case 1:
-            m1Widget = widget;
-            break;
-        case 2:
-            m2Widget = widget;
-            break;
-        case 3:
-            m3Widget = widget;
-            break;
-        case 4:
-            m4Widget = widget;
-            break;
-        default:
-            break;
+            case 1:
+                m1Widget = widget;
+                break;
+            case 2:
+                m2Widget = widget;
+                break;
+            case 3:
+                m3Widget = widget;
+                break;
+            case 4:
+                m4Widget = widget;
+                break;
+            default:
+                break;
         }
         return widget;
     }
 
     _onChangesFromGDMScreen(n) {
         switch (n) {
-        case 1:
-            if (m1Widget)
-                m1Widget.destroy();
-            break;
-        case 2:
-            if (m2Widget)
-                m2Widget.destroy();
-            break;
-        case 3:
-            if (m3Widget)
-                m3Widget.destroy();
-            break;
-        case 4:
-            if (m4Widget)
-                m4Widget.destroy();
-            break;
-        default:
-            break;
+            case 1:
+                if (m1Widget)
+                    m1Widget.destroy();
+                break;
+            case 2:
+                if (m2Widget)
+                    m2Widget.destroy();
+                break;
+            case 3:
+                if (m3Widget)
+                    m3Widget.destroy();
+                break;
+            case 4:
+                if (m4Widget)
+                    m4Widget.destroy();
+                break;
+            default:
+                break;
         }
 
         Main.screenShield._lockDialogGroup.insert_child_below(this._createWidget(n), null);
