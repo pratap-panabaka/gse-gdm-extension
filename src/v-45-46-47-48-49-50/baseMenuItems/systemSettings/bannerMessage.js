@@ -4,7 +4,7 @@ import St from 'gi://St';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 const LOGIN_SCREEN_SCHEMA = 'org.gnome.login-screen';
-const dconfLoginSettings = new Gio.Settings({schema_id: LOGIN_SCREEN_SCHEMA});
+const dconfLoginSettings = new Gio.Settings({ schema_id: LOGIN_SCREEN_SCHEMA });
 
 let inputText, getInput;
 
@@ -19,9 +19,13 @@ const bannerMessage = () => {
         can_focus: true,
     });
 
-    inputText.clutter_text.connect('activate', actor => {
-        getInput = actor.get_text();
-        dconfLoginSettings.set_string('banner-message-text', getInput);
+    const signals = ['activate', 'key-focus-out'];
+
+    signals.forEach(signal => {
+        inputText.clutter_text.connect(signal, actor => {
+            getInput = actor.get_text();
+            dconfLoginSettings.set_string('banner-message-text', getInput);
+        });
     });
 
     item.connect('notify::active', () => inputText.grab_key_focus());
