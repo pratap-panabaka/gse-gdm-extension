@@ -20,7 +20,7 @@
 
 > [!IMPORTANT]
 > On the login screen > sub menus, the data is collected from, for
-> 1. bakcgrounds: `['/usr/local/share/backgrounds', '/usr/share/backgrounds']`
+> 1. bakcgrounds: `['/var/tmp/gdm-extension-backgrounds', '/tmp/gdm-extension-backgrounds', '/usr/local/share/backgrounds', '/usr/share/backgrounds']`
 > 2. fonts: `['/usr/local/share/fonts', '/usr/share/fonts']`
 > 3. icon-themes: `['/usr/local/share/icons', '/usr/share/icons']`
 > 4. shell-themes: `['/usr/local/share/themes', '/usr/share/themes']`

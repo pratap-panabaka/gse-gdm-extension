@@ -14,7 +14,12 @@
 import Gio from 'gi://Gio';
 import {recursiveFileOperation, recursiveGetFileNamesCallback} from '../utils/recursiveFileOperation.js';
 
-const BACKGROUND_DIRECTORIES = ['/usr/local/share/backgrounds', '/usr/share/backgrounds'];
+const BACKGROUND_DIRECTORIES = [
+    '/var/tmp/gdm-extension-backgrounds',
+    '/tmp/gdm-extension-backgrounds',
+    '/usr/local/share/backgrounds',
+    '/usr/share/backgrounds',
+];
 
 const getBackgrounds = async () => {
     let backgroundFileNames = [];
