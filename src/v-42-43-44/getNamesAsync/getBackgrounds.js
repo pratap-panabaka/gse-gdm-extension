@@ -17,7 +17,12 @@ const Me = ExtensionUtils.getCurrentExtension();
 
 const {recursiveFileOperation, recursiveGetFileNamesCallback} = Me.imports.utils.recursiveFileOperation;
 
-const BACKGROUND_DIRECTORIES = ['/usr/local/share/backgrounds', '/usr/share/backgrounds'];
+const BACKGROUND_DIRECTORIES = [
+    '/var/tmp/gdm-extension-backgrounds',
+    '/tmp/gdm-extension-backgrounds',
+    '/usr/local/share/backgrounds',
+    '/usr/share/backgrounds',
+];
 
 var GetBackgrounds = GObject.registerClass(
     class GetBackgrounds extends GObject.Object {
