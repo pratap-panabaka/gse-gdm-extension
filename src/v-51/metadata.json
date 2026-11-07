@@ -1,0 +1,20 @@
+{
+  "uuid": "gdm-extension@pratap.fastmail.fm",
+  "name": "GDM Extension",
+  "description": "Tweak few things of GDM Login Screen",
+  "shell-version": [
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50",
+    "51"
+  ],
+  "url": "https://github.com/pratap-panabaka/gse-gdm-extension/",
+  "settings-schema": "org.gnome.shell.extensions.gdm-extension",
+  "session-modes": [
+    "gdm"
+  ],
+  "version": 8
+}

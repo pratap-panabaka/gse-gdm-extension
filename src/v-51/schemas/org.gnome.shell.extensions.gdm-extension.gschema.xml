@@ -1,0 +1,193 @@
+<schemalist>
+    <schema id="org.gnome.shell.extensions.gdm-extension" path="/org/gnome/shell/extensions/gdm-extension/">
+
+        <key name="primary-color-1" type="s">
+            <default>"red"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="primary-color-2" type="s">
+            <default>"red"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="primary-color-3" type="s">
+            <default>"red"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="primary-color-4" type="s">
+            <default>"red"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="gradient-direction-1" type="s">
+            <default>"horizontal"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="gradient-direction-2" type="s">
+            <default>"horizontal"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="gradient-direction-3" type="s">
+            <default>"horizontal"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="gradient-direction-4" type="s">
+            <default>"horizontal"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="secondary-color-1" type="s">
+            <default>"orange"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="secondary-color-2" type="s">
+            <default>"orange"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="secondary-color-3" type="s">
+            <default>"orange"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="secondary-color-4" type="s">
+            <default>"orange"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="background-image-path-1" type="s">
+            <default>"none"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="background-image-path-2" type="s">
+            <default>"none"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="background-image-path-3" type="s">
+            <default>"none"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="background-image-path-4" type="s">
+            <default>"none"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="background-size-1" type="s">
+            <default>"cover"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="background-size-2" type="s">
+            <default>"cover"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="background-size-3" type="s">
+            <default>"cover"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="background-size-4" type="s">
+            <default>"cover"</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="blur-radius-1" type="i">
+            <range min="0" max="100" />
+            <default>0</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="blur-radius-2" type="i">
+            <range min="0" max="100" />
+            <default>0</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="blur-radius-3" type="i">
+            <range min="0" max="100" />
+            <default>0</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="blur-radius-4" type="i">
+            <range min="0" max="100" />
+            <default>0</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="blur-brightness-1" type="d">
+            <range min="0" max="1" />
+            <default>0.65</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="blur-brightness-2" type="d">
+            <range min="0" max="1" />
+            <default>0.65</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="blur-brightness-3" type="d">
+            <range min="0" max="1" />
+            <default>0.65</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="blur-brightness-4" type="d">
+            <range min="0" max="1" />
+            <default>0.65</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="shell-theme" type="s">
+            <default>''</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+        <key name="hide-gdm-extension-button" type="b">
+            <default>false</default>
+            <summary>Summary</summary>
+            <description>Description</description>
+        </key>
+
+    </schema>
+</schemalist>
