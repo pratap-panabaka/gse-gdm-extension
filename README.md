@@ -24,17 +24,18 @@ A configurable GNOME Shell extension that brings customization options to the GD
 
 ## Compatibility
 
-The extension has been developed for GNOME Shell 42 and above. Compatibility depends on the GNOME Shell version and the corresponding extension source.
+The extension supports GNOME Shell versions **42 through 51**.
 
-### Installer support
+The installer automatically detects the installed GNOME Shell version and selects the corresponding extension source.
 
-| GNOME Shell version | Installer |
+### Supported GNOME Shell versions
+
+| GNOME Shell version | Extension source |
 |---|---|
-| 45–49 | `v-45-46-47-48-49-install.sh` |
-| 50 | `v-50-install.sh` |
-| 51 | `v-51-install.sh` |
+| 42, 43, 44 | `src/v-42-43-44/` |
+| 45, 46, 47, 48, 49, 50, 51 | `src/v-45-46-47-48-49-50-51/` |
 
-The root `install.sh` detects the installed GNOME Shell version and launches the corresponding installer.
+GNOME Shell versions below 42 or above 51 are not supported by the current installer.
 
 **Test environment:** Arch Linux.
 
@@ -57,8 +58,8 @@ Before installing:
 
 1. The installation scripts assume that `gdm-extension` is the only GNOME Shell extension enabled for the GDM user.
 2. GDM uses a separate dconf configuration profile and user database.
-3. Installation scripts configure the GDM extension activation automatically.
-4. The GNOME 51 installer backs up and removes the existing GDM user dconf database to address an extension activation issue. This can reset other GDM-specific preferences.
+3. The installer automatically configures the GDM extension activation.
+4. The GNOME 51 installation process backs up and removes the existing GDM user dconf database to address an extension activation issue. This can reset other GDM-specific preferences.
 5. Users with custom GDM configuration should review their dconf profile and database before installation.
 6. Conflicts with other extensions or manual GDM configuration changes may cause unexpected behavior.
 
@@ -66,16 +67,18 @@ Before installing:
 
 ## Prerequisites
 
-Install the following packages before running the installer:
+The installer requires:
 
-| Package | Purpose |
+| Dependency | Purpose |
 |---|---|
-| `zip` | Create the extension archive |
-| `unzip` | Extract the extension |
-| `dconf` | Configure GDM settings |
-| `glib-compile-schemas` | Compile extension schemas |
+| `bash` | Execute installation scripts |
+| `dconf` | Configure and update GDM settings |
 
-These utilities must be available in your system's PATH.
+No additional packaging or extraction utilities are required by the installer.
+
+**Note:** `gnome-shell` must also be installed so that the installer can detect the installed GNOME Shell version.
+
+---
 
 ## Installation
 
@@ -95,19 +98,21 @@ sudo ./install.sh
 
 The installer automatically:
 
-1. Detects the installed GNOME Shell version.
-2. Selects the corresponding version-specific installation script.
-3. Packages the extension source.
-4. Installs the extension under:
+1. Checks for root privileges.
+2. Verifies the required dependencies.
+3. Detects the installed GNOME Shell version.
+4. Checks whether the detected version is supported.
+5. Selects the corresponding version-specific extension source.
+6. Creates the GDM dconf profile.
+7. Configures the extension activation and settings.
+8. Updates the dconf database.
+9. Copies the selected extension source files into:
 
    ```text
    /usr/local/share/gnome-shell/extensions/gdm-extension@pratap.fastmail.fm
    ```
 
-5. Compiles the extension schemas, if present.
-6. Configures the GDM dconf profile.
-7. Enables the extension for the GDM session.
-8. Performs version-specific configuration and cleanup.
+If the detected GNOME Shell version is unsupported, the installer terminates with an appropriate error message.
 
 ### 3. Restart your system
 
@@ -132,7 +137,7 @@ You can control the visibility of the extension button through dconf.
 Open the configuration file:
 
 ```bash
-sudo nano /etc/dconf/db/gdm.d/99-gdm-extension
+sudo nano /etc/dconf/db/gdmextensionbypratappanabaka.d/99-gdm-extension
 ```
 
 Find the following setting:
@@ -189,51 +194,15 @@ To remove the extension, execute:
 sudo ./uninstall.sh
 ```
 
-The root uninstaller detects your GNOME Shell version and invokes the corresponding version-specific uninstaller.
+The uninstaller automatically:
 
-The uninstallation process removes the extension and its associated dconf configuration.
+1. Checks the installed GNOME Shell version.
+2. Selects the corresponding version-specific cleanup procedure.
+3. Removes the installed extension.
+4. Removes the associated dconf configuration.
 
 A reboot is recommended after uninstallation.
 
-**Note:** The GNOME 51 uninstaller preserves the GDM user dconf database to avoid unnecessarily removing unrelated GDM preferences.
-
----
-
-## Troubleshooting
-
-### GDM Extension button is not visible
-
-Check whether the extension is enabled:
-
-```bash
-sudo env \
-  DCONF_PROFILE=gdm \
-  XDG_CONFIG_HOME=/var/lib/gdm/seat0/config \
-  gsettings get org.gnome.shell enabled-extensions
-```
-
-Expected output:
-
-```text
-['gdm-extension@pratap.fastmail.fm']
-```
-
-Check whether GNOME Shell extensions are globally disabled:
-
-```bash
-sudo env \
-  DCONF_PROFILE=gdm \
-  XDG_CONFIG_HOME=/var/lib/gdm/seat0/config \
-  gsettings get org.gnome.shell disable-user-extensions
-```
-
-Expected output:
-
-```text
-false
-```
-
-**GNOME 51 note:** An existing GDM dconf user database containing `disable-user-extensions=true` can prevent the extension from activating even when it is listed in `enabled-extensions`. The GNOME 51 installer backs up and resets this database.
 
 ### Manual recovery
 
@@ -248,7 +217,9 @@ Log in and remove the extension:
 ```bash
 sudo rm -rf /usr/local/share/gnome-shell/extensions/gdm-extension@pratap.fastmail.fm
 
-sudo rm -f /etc/dconf/db/gdm.d/99-gdm-extension
+sudo rm -f /etc/dconf/db/gdmextensionbypratappanabaka.d/99-gdm-extension
+
+sudo rm -f /etc/dconf/profile/gdm
 
 sudo dconf update
 ```
@@ -273,20 +244,23 @@ gse-gdm-extension/
 ├── install.sh
 ├── uninstall.sh
 │
-├── scripts/
-│   ├── install/
-│   │   ├── v-45-46-47-48-49-install.sh
-│   │   ├── v-50-install.sh
-│   │   └── v-51-install.sh
-│   │
-│   └── uninstall/
-│       ├── v-45-46-47-48-49-uninstall.sh
-│       ├── v-50-uninstall.sh
-│       └── v-51-uninstall.sh
-│
 └── src/
-    ├── v-45-46-47-48-49-50/
-    └── v-51/
+    ├── v-42-43-44/
+    │   ├── getNamesAsync/
+    │   ├── menus/
+    │   ├── schemas/
+    │   └── utils/
+    │
+    └── v-45-46-47-48-49-50-51/
+        ├── baseMenuItems/
+        │   ├── backgrounds/
+        │   │
+        │   └── systemSettings/
+        │
+        ├── getNamesAsync/
+        ├── menus/
+        ├── schemas/
+        └── utils/
 ```
 
 ---

@@ -1,192 +1,59 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-set -Eeuo pipefail
+set -euo pipefail
 
-# ==================================================
-# GDM Extension Uninstaller
-# ==================================================
-
-# --------------------------------------------------
 # Configuration
-# --------------------------------------------------
 
-EXTENSION_NAME="gdm-extension"
-EXTENSION_DOMAIN="pratap.fastmail.fm"
-EXTENSION_UUID="${EXTENSION_NAME}@${EXTENSION_DOMAIN}"
+EXTENSION_NAME="gdm-extension@pratap.fastmail.fm"
+DB_NAME="gdmextensionbypratappanabaka"
 
-EXTENSION_INSTALL_DIR="/usr/local/share/gnome-shell/extensions"
+DCONF_PROFILE_PATH="/etc/dconf/profile/gdm"
+DB_DIR="/etc/dconf/db/${DB_NAME}.d"
 
-GDM_DCONF_DB_DIR="/etc/dconf/db/gdm.d"
-GDM_DCONF_EXTENSION_FILE="$GDM_DCONF_DB_DIR/99-gdm-extension"
+# Root privilege check
 
-# --------------------------------------------------
-# Script directories
-# --------------------------------------------------
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-COMMON_DIR="$SCRIPT_DIR/scripts/common"
-
-# --------------------------------------------------
-# Logging
-# --------------------------------------------------
-
-log() {
-    printf '\n%s\n' "$1"
-}
-
-error() {
-    printf '\nError: %s\n' "$1" >&2
+if [[ $EUID -ne 0 ]]; then
+    echo "Error: Please run this script using sudo."
     exit 1
-}
-
-# --------------------------------------------------
-# Load shared helpers
-# --------------------------------------------------
-
-for helper in \
-    "$COMMON_DIR/extension-manager.sh" \
-    "$COMMON_DIR/gdm-dconf.sh"
-do
-    [[ -f "$helper" ]] || error "Required helper not found: $helper"
-    source "$helper"
-done
-
-# --------------------------------------------------
-# Configure shared helper variables
-# --------------------------------------------------
-
-export EXTENSION_NAME
-export EXTENSION_DOMAIN
-export EXTENSION_UUID
-export EXTENSION_INSTALL_DIR
-
-# --------------------------------------------------
-# Check root privileges
-# --------------------------------------------------
-
-if [[ "$EUID" -ne 0 ]]; then
-    error "Root privileges are required. Run: sudo ./uninstall.sh"
 fi
 
-# --------------------------------------------------
-# Check required commands
-# --------------------------------------------------
+# Remove extension-related files
 
-check_dependencies() {
-    local commands=(
-        dconf
-        rm
-        cp
-        mktemp
-    )
+find /etc /var -type f -name "$DB_NAME" -delete
 
-    local cmd
+echo "Removed extension-related database files."
 
-    for cmd in "${commands[@]}"; do
-        command -v "$cmd" >/dev/null 2>&1 ||
-            error "Required command not found: $cmd"
-    done
-}
+# Remove dconf configuration directory
 
-# --------------------------------------------------
-# Remove GDM extension dconf configuration
-# --------------------------------------------------
+if [[ -d "$DB_DIR" ]]; then
+    rm -rf "$DB_DIR"
+fi
 
-remove_gdm_extension_settings() {
-    local temp_backup=""
+echo "Removed dconf configuration directory."
 
-    if [[ ! -f "$GDM_DCONF_EXTENSION_FILE" ]]; then
-        log "GDM extension dconf configuration not found."
-        log "Skipping configuration removal."
-    else
-        log "Removing GDM extension dconf configuration..."
+# Remove GDM dconf profile
 
-        # Keep a temporary copy so we can restore the file
-        # if dconf compilation fails.
-        temp_backup="$(mktemp)" ||
-            error "Unable to create temporary configuration backup"
+if [[ -f "$DCONF_PROFILE_PATH" ]]; then
+    rm -f "$DCONF_PROFILE_PATH"
+fi
 
-        cp -a "$GDM_DCONF_EXTENSION_FILE" "$temp_backup" ||
-            error "Unable to back up GDM extension configuration"
+echo "Removed GDM dconf profile."
 
-        if ! rm -f -- "$GDM_DCONF_EXTENSION_FILE"; then
-            rm -f "$temp_backup"
-            error "Unable to remove GDM extension configuration"
-        fi
-
-        if ! dconf update; then
-            log "WARNING: Failed to update GDM dconf database."
-            log "Restoring previous extension configuration..."
-
-            cp -a "$temp_backup" "$GDM_DCONF_EXTENSION_FILE" ||
-                error "Unable to restore previous GDM configuration"
-
-            rm -f "$temp_backup"
-
-            dconf update ||
-                log "WARNING: GDM dconf database could not be restored."
-
-            error "GDM extension configuration removal failed"
-        fi
-
-        rm -f "$temp_backup"
-
-        log "GDM extension dconf configuration removed."
-        log "GDM dconf database updated successfully."
-    fi
-
-    # Keep the system dconf database synchronized even
-    # when the extension configuration was already absent.
-    if [[ ! -f "$GDM_DCONF_EXTENSION_FILE" ]]; then
-        dconf update ||
-            error "Failed to update GDM dconf database"
-    fi
-}
-
-# --------------------------------------------------
 # Remove GNOME Shell extension
-# --------------------------------------------------
 
-remove_extension_files() {
-    log "Removing GNOME Shell extension..."
+find /usr/local/share/gnome-shell/extensions \
+    -type d \
+    -name "$EXTENSION_NAME" \
+    -prune \
+    -exec rm -rf {} + 2>/dev/null || true
 
-    uninstall_extension ||
-        error "Failed to uninstall GNOME Shell extension"
-}
+echo "Removed GNOME Shell extension."
 
-# --------------------------------------------------
-# Main uninstallation
-# --------------------------------------------------
+# Update dconf database
 
-main() {
-    log "========================================"
-    log "       GDM Extension Uninstallation"
-    log "========================================"
+dconf update
 
-    check_dependencies
+echo "-----------------------------------------"
+echo "GDM extension uninstallation completed!"
+echo "-----------------------------------------"
 
-    # 1. Remove extension-specific GDM settings.
-    log "Step 1: Removing GDM extension settings..."
-
-    remove_gdm_extension_settings
-
-    # 2. Remove extension files.
-    log "Step 2: Removing GNOME Shell extension..."
-
-    remove_extension_files
-
-    # 3. Uninstallation completed.
-    log "========================================"
-    log "  Uninstallation completed successfully"
-    log "========================================"
-
-    printf '\n'
-    printf 'Extension UUID : %s\n' "$EXTENSION_UUID"
-    printf 'Install Path   : %s\n' "$EXTENSION_DIR"
-    printf '\n'
-
-    log "Restart GDM or reboot to apply the changes."
-}
-
-main "$@"

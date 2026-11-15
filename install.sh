@@ -1,246 +1,172 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-set -Eeuo pipefail
+set -euo pipefail
 
-# ==================================================
-# GDM Extension Installer
-# ==================================================
-
-# --------------------------------------------------
+# -----------------------------------------
 # Configuration
-# --------------------------------------------------
+# -----------------------------------------
 
-EXTENSION_NAME="gdm-extension"
-EXTENSION_DOMAIN="pratap.fastmail.fm"
-EXTENSION_UUID="${EXTENSION_NAME}@${EXTENSION_DOMAIN}"
+EXTENSION_NAME="gdm-extension@pratap.fastmail.fm"
+DB_NAME="gdmextensionbypratappanabaka"
 
-EXTENSION_INSTALL_DIR="/usr/local/share/gnome-shell/extensions"
+SOURCE_PROFILE="/usr/share/dconf/profile/gdm"
+DCONF_PROFILE_PATH="/etc/dconf/profile/gdm"
 
-GDM_DCONF_DB_DIR="/etc/dconf/db/gdm.d"
-GDM_DCONF_EXTENSION_FILE="$GDM_DCONF_DB_DIR/99-gdm-extension"
-
-GDM_DCONF_PROFILE="/etc/dconf/profile/gdm"
-GDM_DCONF_PROFILE_NAME="gdm"
-
-# --------------------------------------------------
-# Script directories
-# --------------------------------------------------
+DB_DIR="/etc/dconf/db/${DB_NAME}.d"
+DB_CONFIG_FILE="${DB_DIR}/99-gdm-extension"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SOURCE_DIR="${SCRIPT_DIR}/src"
 
-COMMON_DIR="$SCRIPT_DIR/scripts/common"
+EXTENSION_INSTALL_DIR="/usr/local/share/gnome-shell/extensions/${EXTENSION_NAME}"
 
-# --------------------------------------------------
-# Logging
-# --------------------------------------------------
+# -----------------------------------------
+# Root privilege check
+# -----------------------------------------
 
-log() {
-    printf '\n%s\n' "$1"
-}
-
-error() {
-    printf '\nError: %s\n' "$1" >&2
+if [[ $EUID -ne 0 ]]; then
+    echo "Error: Please run this script using sudo."
     exit 1
-}
-
-# --------------------------------------------------
-# Load shared helpers
-# --------------------------------------------------
-
-for helper in \
-    "$COMMON_DIR/detect-gnome-version.sh" \
-    "$COMMON_DIR/extension-manager.sh" \
-    "$COMMON_DIR/gdm-dconf.sh"
-do
-    [[ -f "$helper" ]] || error "Required helper not found: $helper"
-    source "$helper"
-done
-
-# --------------------------------------------------
-# Configure shared helper variables
-# --------------------------------------------------
-
-export EXTENSION_NAME
-export EXTENSION_DOMAIN
-export EXTENSION_UUID
-export EXTENSION_INSTALL_DIR
-
-export GDM_DCONF_PROFILE
-export GDM_DCONF_PROFILE_NAME
-
-# --------------------------------------------------
-# Check root privileges
-# --------------------------------------------------
-
-if [[ "$EUID" -ne 0 ]]; then
-    error "Root privileges are required. Run: sudo ./install.sh"
 fi
 
-# --------------------------------------------------
-# Check required commands
-# --------------------------------------------------
+# -----------------------------------------
+# Dependency check
+# -----------------------------------------
 
-check_dependencies() {
-    local commands=(
-        gnome-shell
-        dconf
-        glib-compile-schemas
-        getent
-        runuser
-        awk
-        cp
-        mv
-        mktemp
-        date
-    )
+if ! command -v dconf >/dev/null 2>&1; then
+    echo "Error: dconf is not installed."
+    exit 1
+fi
 
-    local cmd
+if ! command -v gnome-shell >/dev/null 2>&1; then
+    echo "Error: GNOME Shell is not installed or not available in PATH."
+    exit 1
+fi
 
-    for cmd in "${commands[@]}"; do
-        command -v "$cmd" >/dev/null 2>&1 ||
-            error "Required command not found: $cmd"
-    done
-}
+# -----------------------------------------
+# Detect GNOME Shell version
+# -----------------------------------------
 
-# --------------------------------------------------
-# Detect GNOME version
-# --------------------------------------------------
+GNOME_SHELL_VERSION_OUTPUT="$(gnome-shell --version 2>/dev/null || true)"
 
-detect_gnome_version || error "Unable to detect GNOME Shell version"
+if [[ "$GNOME_SHELL_VERSION_OUTPUT" =~ ([0-9]+)\. ]]; then
+    GNOME_SHELL_VERSION="${BASH_REMATCH[1]}"
+else
+    echo "Error: Unable to detect GNOME Shell version."
+    echo "Detected output: ${GNOME_SHELL_VERSION_OUTPUT:-No version information}"
+    exit 1
+fi
 
-GNOME_SOURCE_DIR="$(get_gnome_source_directory)" ||
-    error "Unsupported GNOME Shell version: $GNOME_VERSION"
+echo "Detected GNOME Shell version: ${GNOME_SHELL_VERSION}"
 
-SRC_DIR="$SCRIPT_DIR/src/$GNOME_SOURCE_DIR"
+# -----------------------------------------
+# Select compatible extension source
+# -----------------------------------------
 
-log "Detected GNOME Shell version: $GNOME_VERSION"
-log "Using extension source: $SRC_DIR"
+case "$GNOME_SHELL_VERSION" in
+    42|43|44)
+        VERSION_SOURCE_DIR="${SOURCE_DIR}/v-42-43-44"
+        ;;
 
-# --------------------------------------------------
-# Validate source directory
-# --------------------------------------------------
+    45|46|47|48|49|50|51)
+        VERSION_SOURCE_DIR="${SOURCE_DIR}/v-45-46-47-48-49-50-51"
+        ;;
 
-validate_extension_source "$SRC_DIR" ||
-    error "Extension source validation failed"
+    *)
+        echo "Error: Unsupported GNOME Shell version: ${GNOME_SHELL_VERSION}"
+        echo "Supported versions: GNOME Shell 42 to 51."
+        exit 1
+        ;;
+esac
 
-# --------------------------------------------------
-# Backup existing GDM extension configuration
-# --------------------------------------------------
+if [[ ! -d "$VERSION_SOURCE_DIR" ]]; then
+    echo "Error: Extension source directory not found:"
+    echo "$VERSION_SOURCE_DIR"
+    exit 1
+fi
 
-backup_gdm_configuration() {
-    local config_file="$1"
-    local backup_file
+echo "Selected extension source: ${VERSION_SOURCE_DIR}"
 
-    if [[ ! -f "$config_file" ]]; then
-        return 0
+# -----------------------------------------
+# Extract file-db entry (optional)
+# -----------------------------------------
+
+FILE_DB=""
+
+if [[ -f "$SOURCE_PROFILE" ]]; then
+    FILE_DB="$(grep '^file-db:' "$SOURCE_PROFILE" || true)"
+fi
+
+# -----------------------------------------
+# Create GDM dconf profile
+# -----------------------------------------
+
+mkdir -p "$(dirname "$DCONF_PROFILE_PATH")"
+
+TEMP_PROFILE="$(mktemp "$(dirname "$DCONF_PROFILE_PATH")/.gdm.XXXXXX")"
+
+{
+    echo "user-db:${DB_NAME}"
+    echo "system-db:${DB_NAME}"
+
+    if [[ -n "$FILE_DB" ]]; then
+        echo "$FILE_DB"
     fi
+} > "$TEMP_PROFILE"
 
-    backup_file="${config_file}.backup.$(date +%Y%m%d-%H%M%S).$$"
+chmod 644 "$TEMP_PROFILE"
 
-    cp -a "$config_file" "$backup_file" ||
-        error "Unable to back up $config_file"
+mv "$TEMP_PROFILE" "$DCONF_PROFILE_PATH"
 
-    log "Configuration backup created: $backup_file"
-}
+echo "GDM dconf profile created."
 
-# --------------------------------------------------
-# Configure GDM extension dconf settings
-# --------------------------------------------------
+# -----------------------------------------
+# Create dconf database directory
+# -----------------------------------------
 
-configure_gdm_extension_settings() {
-    local temp_file
+mkdir -p "$DB_DIR"
 
-    mkdir -p "$GDM_DCONF_DB_DIR" ||
-        error "Unable to create GDM dconf database directory"
+# -----------------------------------------
+# Create extension configuration
+# -----------------------------------------
 
-    backup_gdm_configuration "$GDM_DCONF_EXTENSION_FILE"
-
-    temp_file="$(mktemp "$GDM_DCONF_DB_DIR/.gdm-extension.XXXXXX")" ||
-        error "Unable to create temporary dconf configuration"
-
-    cat > "$temp_file" <<EOF
+cat > "$DB_CONFIG_FILE" <<EOF
 [org/gnome/shell]
-enabled-extensions=['$EXTENSION_UUID']
-disable-user-extensions=false
+enabled-extensions=['${EXTENSION_NAME}']
 
-[org/gnome/shell/extensions/$EXTENSION_NAME]
+[org/gnome/shell/extensions/gdm-extension]
 hide-gdm-extension-button=false
 EOF
 
-    chmod 644 "$temp_file" ||
-        error "Unable to set dconf configuration permissions"
+chmod 644 "$DB_CONFIG_FILE"
 
-    mv "$temp_file" "$GDM_DCONF_EXTENSION_FILE" ||
-        error "Unable to install GDM extension dconf configuration"
+echo "GDM extension configuration created."
 
-    log "GDM extension dconf settings configured."
-}
+# -----------------------------------------
+# Update dconf database
+# -----------------------------------------
 
-# --------------------------------------------------
-# Update GDM dconf database
-# --------------------------------------------------
+dconf update
 
-update_gdm_dconf_database() {
-    log "Updating GDM dconf database..."
+echo "GDM dconf database updated."
 
-    dconf update ||
-        error "Failed to update GDM dconf database"
+# -----------------------------------------
+# Install GDM extension files
+# -----------------------------------------
 
-    log "GDM dconf database updated successfully."
-}
+mkdir -p "$EXTENSION_INSTALL_DIR"
 
-# --------------------------------------------------
-# Main installation
-# --------------------------------------------------
+cp -a "$VERSION_SOURCE_DIR/." "$EXTENSION_INSTALL_DIR/"
 
-main() {
-    log "========================================"
-    log "       GDM Extension Installation"
-    log "========================================"
+echo "GDM extension files copied successfully."
 
-    check_dependencies
+# -----------------------------------------
+# Installation completed
+# -----------------------------------------
 
-    # 1. Configure GDM dconf profile.
-    log "Step 1: Configuring GDM dconf profile..."
-
-    configure_gdm_dconf_profile ||
-        error "Failed to configure GDM dconf profile"
-
-    # 2. Install extension files.
-    log "Step 2: Installing GNOME Shell extension..."
-
-    install_extension "$SRC_DIR" ||
-        error "Extension installation failed"
-
-    # 3. Configure extension settings.
-    log "Step 3: Configuring GDM extension settings..."
-
-    configure_gdm_extension_settings
-
-    # 4. Compile/update GDM dconf database.
-    log "Step 4: Updating GDM dconf database..."
-
-    update_gdm_dconf_database
-
-    # 5. Repair conflicting GDM user-level setting.
-    log "Step 5: Checking GDM user dconf setting..."
-
-    repair_gdm_user_dconf ||
-        error "GDM user dconf repair failed"
-
-    # 6. Installation completed.
-    log "========================================"
-    log "   Installation completed successfully"
-    log "========================================"
-
-    printf '\n'
-    printf 'Extension UUID : %s\n' "$EXTENSION_UUID"
-    printf 'GNOME Version  : %s\n' "$GNOME_VERSION"
-    printf 'Install Path   : %s\n' "$EXTENSION_DIR"
-    printf 'Source Path    : %s\n' "$SRC_DIR"
-    printf '\n'
-
-    log "Restart GDM or reboot to apply the changes."
-}
-
-main "$@"
+echo "-----------------------------------------"
+echo "GDM extension installation completed!"
+echo "GNOME Shell version: ${GNOME_SHELL_VERSION}"
+echo "Extension source: ${VERSION_SOURCE_DIR}"
+echo "Installation path: ${EXTENSION_INSTALL_DIR}"
+echo "-----------------------------------------"
