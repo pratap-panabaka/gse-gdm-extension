@@ -59,9 +59,8 @@ Before installing:
 1. The installation scripts assume that `gdm-extension` is the only GNOME Shell extension enabled for the GDM user.
 2. GDM uses a separate dconf configuration profile and user database.
 3. The installer automatically configures the GDM extension activation.
-4. The GNOME 51 installation process backs up and removes the existing GDM user dconf database to address an extension activation issue. This can reset other GDM-specific preferences.
-5. Users with custom GDM configuration should review their dconf profile and database before installation.
-6. Conflicts with other extensions or manual GDM configuration changes may cause unexpected behavior.
+4. Users with custom GDM configuration should review their dconf profile and database before installation.
+5. Conflicts with other extensions or manual GDM configuration changes may cause unexpected behavior.
 
 ---
 
