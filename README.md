@@ -279,3 +279,13 @@ If you encounter compatibility issues with a particular GNOME Shell version or L
 This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**.
 
 See [LICENSE](LICENSE) for details.
+
+<p align="center">
+  <a href="https://www.buymeacoffee.com/pratap.panabaka" target="_blank">
+    <img
+      src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+      alt="Buy Me A Coffee"
+      width="200"
+    />
+  </a>
+</p>
