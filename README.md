@@ -8,9 +8,6 @@ A configurable GNOME Shell extension that brings customization options to the GD
 
 <img width="1920" height="1080" alt="gdm-extension-by-pratap-panabaka" src="https://github.com/user-attachments/assets/2a02d4bd-ea33-4ed9-b424-a0a3ce22e2d3" />
 
-
-**Repository:** [pratap-panabaka/gse-gdm-extension](https://github.com/pratap-panabaka/gse-gdm-extension)
-
 ---
 
 ## Features
