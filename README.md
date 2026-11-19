@@ -6,6 +6,9 @@
 
 A configurable GNOME Shell extension that brings customization options to the GDM login screen. Change backgrounds, themes, fonts, icons, colors, blur effects, logos, and banner messages without manually editing GNOME Shell CSS files.
 
+<img width="1920" height="1080" alt="gdm-extension-by-pratap-panabaka" src="https://github.com/user-attachments/assets/2a02d4bd-ea33-4ed9-b424-a0a3ce22e2d3" />
+
+
 **Repository:** [pratap-panabaka/gse-gdm-extension](https://github.com/pratap-panabaka/gse-gdm-extension)
 
 ---
